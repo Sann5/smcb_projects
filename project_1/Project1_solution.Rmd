@@ -1,0 +1,43 @@
+---
+title: "Project 1. Solution"
+author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarus"
+date: "2/25/2022"
+output: pdf_document
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(vroom)
+library(BiDAG)
+```
+
+## Problem 1: Conditional independence and BNs
+
+## Problem 2: Markov blanket
+
+## Problem 3: Learning Bayesian networks from protein data
+### a)
+```{r}
+## Set seed
+set.seed(2022)
+
+## Read data
+data <- vroom(file = "sachs.data.txt", show_col_types = FALSE)
+
+## Visualize data dimensions. 
+dim(data)
+```
+
+* $N = 853$
+* $n = 11$
+
+```{r}
+## Split data
+data = data %>% rowid_to_column(var = 'row_id')
+train = data %>% sample_frac(0.8, replace = FALSE)
+test = anti_join(data, train, by = "row_id")
+
+## Initializing socre object
+score_object = scoreparameters(scoretype = 'bge', train)
+```
+
