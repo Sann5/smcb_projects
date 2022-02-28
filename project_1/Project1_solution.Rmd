@@ -12,6 +12,32 @@ library(BiDAG)
 ```
 
 ## Problem 1: Conditional independence and BNs
+\subsection*{a)}
+The condition $A \perp B|C$ holds for this Bayesian network a).
+Proof:
+\begin{equation*}
+\begin{split}
+    P(A,B,C) &= P(A|C)P(B|C)P(C)\\
+    \textnormal{Consider}\\
+    P(A,B|C) &= \frac{P(A,B,C)}{P(C)}\\
+    &=P(A|C)P(B|C)\\
+    &\implies A\perp B|C\\
+\end{split} 
+\end{equation*}
+Hence Proved.
+\subsection*{b)}
+The condition $A \perp B$ holds for this Bayesian network b).
+Proof:
+\begin{equation*}
+\begin{split}
+    P(A,B,C) &= P(A)P(B)P(C|A,B)\\
+    P(C|A,B) &= \frac{P(A,B,C)}{P(A,B)}\\
+    \textnormal{Substituting}\\
+    P(A,B) &= P(A)P(B)\\    
+    &\implies A\perp B\\
+\end{split} 
+\end{equation*}
+Hence Proved.
 
 ## Problem 2: Markov blanket
 
