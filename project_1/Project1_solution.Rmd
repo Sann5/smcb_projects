@@ -4,7 +4,7 @@ author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarus"
 date: "2/25/2022"
 output: pdf_document
 ---
-
+#HI
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(vroom)
