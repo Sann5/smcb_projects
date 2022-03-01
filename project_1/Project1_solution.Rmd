@@ -1,6 +1,6 @@
 ---
 title: "Project 1. Solution"
-author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarus"
+author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
 date: "2/25/2022"
 output: pdf_document
 ---
