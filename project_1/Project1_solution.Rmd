@@ -15,34 +15,79 @@ library(parallel)
 
 ## Problem 1: Conditional independence and BNs
 \subsection*{a)}
-The condition $A \perp B|C$ holds for this Bayesian network a).
+The condition $A \perp B|C$ holds for this Bayesian network a).  
 Proof:
 \begin{equation*}
 \begin{split}
     P(A,B,C) &= P(A|C)P(B|C)P(C)\\
-    \textnormal{Consider}\\
+    \textnormal{Using Bayes' rule, and substituting}\\
     P(A,B|C) &= \frac{P(A,B,C)}{P(C)}\\
+    &=\frac{P(A|C)P(B|C)P(C)}{P(C)}\\
     &=P(A|C)P(B|C)\\
     &\implies A\perp B|C\\
 \end{split} 
 \end{equation*}
-Hence Proved.
+Hence Proved.  
+In general, $A \perp B$ does not hold for this Bayesian network.  
+Proof:  
+\begin{equation*}
+\begin{split}
+\textnormal{Consider,}\\
+P(A,B) &= \sum_{C}P(A,B,C)\\
+&= \sum_{C}P(A|C)P(B|C)P(C)\\
+&= P(A)P(B)\sum_{C}\frac{P(C|B)P(C|A)}{P(C)}\\
+&\implies A \perp B \textnormal{ does not generally hold.}\\
+\end{split}
+\end{equation*}
 \subsection*{b)}
-The condition $A \perp B$ holds for this Bayesian network b).
+The condition $A \perp B$ holds for this Bayesian network b).  
 Proof:
 \begin{equation*}
 \begin{split}
     P(A,B,C) &= P(A)P(B)P(C|A,B)\\
-    P(C|A,B) &= \frac{P(A,B,C)}{P(A,B)}\\
-    \textnormal{Substituting}\\
-    P(A,B) &= P(A)P(B)\\    
+    P(A,B) &= \sum_{C}P(A,B,C)\\
+    &=\sum_{C}P(A)P(B)P(C|A,B)\\
+    &=P(A)P(B)\sum_{C}P(C|A,B)\\
+    &=P(A)P(B)\\
     &\implies A\perp B\\
 \end{split} 
 \end{equation*}
-Hence Proved.
-
+Hence Proved.  
+In general, $A \perp B|C$ does not hold for this Bayesian network.  
+Proof:  
+\begin{equation*}
+\begin{split}
+\textnormal{Consider,}\\
+P(A,B|C) &= \frac{P(A,B,C)}{P(C)}\\
+&= \frac{P(C|A,B)P(A)(B)}{P(C)}\\
+\end{split}
+\end{equation*}
+Multiplying and diving by $P(C|A)$ and using Bayes' rule,
+\begin{equation*}
+\begin{split}
+&=\frac{P(C|A,B)P(A)P(B)}{P(C)}\frac{P(C|A)}{P(C|A)}\\
+&=\frac{P(C|A,B)P(A|C)P(B)}{P(C|A)}\\
+\end{split}
+\end{equation*}
+Multiplying and diving by $P(C|B)P(C)$ and using Bayes' rule,  
+\begin{equation*}
+\begin{split}
+&=\frac{P(C|A,B)P(A|C)P(B)}{P(C|A)}\frac{P(C|B)}{P(C|B)}\\
+&=P(A|C)P(B|C)\frac{P(C|A,B)P(C)}{P(C|A)P(C|B)}\\
+\end{split}
+\end{equation*}
+Since $\frac{P(C|A,B)P(C)}{P(C|A)P(C|B)}$ will be equal to 1 in only rare cases, in general, $A \perp B|C$ does not hold for this Bayesian network.
 ## Problem 2: Markov blanket
-
+$MB(D) = \{B,F,E,G,C\}$ 
+Consider,
+\begin{equation*}
+\begin{split}
+P(D|A,B,C,E,F,G) &= \frac{P(A,B,C,D,E,F,G)}{P(A,B,C,E,F,G)}\\
+\textnormal{Since } A \perp B,C,D,E,F,G\\
+P(D|A,B,C,E,F,G) &= \frac{P(A)P(B,C,D,E,F,G)}{P(A)P(B,C,E,F,G)}\\
+&=P(D|MB(D))\\
+\end{split}
+\end{equation*}
 ## Problem 3: Learning Bayesian networks from protein data
 ### a)
 ```{r}
