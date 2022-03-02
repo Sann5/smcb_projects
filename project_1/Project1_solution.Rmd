@@ -88,6 +88,7 @@ P(D|A,B,C,E,F,G) &= \frac{P(A)P(B,C,D,E,F,G)}{P(A)P(B,C,E,F,G)}\\
 &=P(D|MB(D))\\
 \end{split}
 \end{equation*}
+
 ## Problem 3: Learning Bayesian networks from protein data
 ### a)
 ```{r}
@@ -192,6 +193,10 @@ results = mclapply(X = am_values,
                    FUN = avg_BGe_score_and_n_edges, 
                    mc.cores = 5,  
                    mc.preschedule = FALSE)
+
+## Run this in case your OS is Windows ()
+# results = lapply(X = am_values,
+#                  FUN = avg_BGe_score_and_n_edges)
 
 ## Print results
 do.call(rbind, results) 
