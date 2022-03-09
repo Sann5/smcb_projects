@@ -3,44 +3,83 @@ title: "Project 2 EM Algorithm"
 output: pdf_document
 ---
 
-## Problem 1
+# Problem 1
 
 For each observation $D_i$ we can compute the responsibility of each component $P(C_A | D_i)$ as follows:
 
 $$
-P(C_A | D_i) = \frac{P(C_A)P(D_i | \theta_A)}{P(C_A)P(D_i | \theta_A) + P(C_B)P(D_i | \theta_B)} \\
+P(C_A | D_i) = \frac{P(C_A)P(D_i | \theta_A)}{P(C_A)P(D_i | \theta_A) + P(C_B)P(D_i | \theta_B)}
+$$
+
+$$
 P(C_B | D_i) = \frac{P(C_B)P(D_i | \theta_B)}{P(C_A)P(D_i | \theta_A) + P(C_B)P(D_i | \theta_B)}
 $$
 
-We know that $\sum_{k}P(C_k | D_i) = 1$ and therefore that $P(C_A | D_i)  = 1 - P(C_B | D_i)$ for observation $i$. We also know that $P(D_i | \theta) \sim Binom(10, \theta) = {10 \choose k} \theta^k (1-\theta)^{10-k}$, where $k$ is the number of heads in observation $D_i$.
-
-Given that $P(C_A) = 0.6$ and $P(C_B) = 0.4$, and that $\theta_A$ and $\theta_A$ are 0.7 and 0.4 respectively; for the first observation $D_1$ we have that $k = 4$ and therefore:
+We know that $\sum_{k}P(C_k | D_i) = 1$ and therefore that $P(C_A | D_i)  = 1 - P(C_B | D_i)$ for observation $i$. We also know that $P(D_i | \theta) = {10 \choose k} \theta^k (1-\theta)^{10-k}$, where $k$ is the number of heads in observation $D_i$. Given that $P(C_A) = 0.6$ and $P(C_B) = 0.4$, and that $\theta_A$ and $\theta_A$ are 0.7 and 0.4 respectively; for the first observation $D_1$ we have that $k = 4$ and therefore:
 
 $$
-P(C_A | D_1) = \frac{0.6*{10 \choose 4} * 0.7^4 * 0.3^6}{0.6*{10 \choose 4} * 0.7^4 * 0.3^6 + 0.4*{10 \choose 4} * 0.4^4 * 0.6^6} \approx 0.18 \\
+P(C_A | D_1) = \frac{0.6 * 0.7^4 * 0.3^6}{0.6 * 0.7^4 * 0.3^6 + 0.4 * 0.4^4 * 0.6^6} \approx 0.18
+$$
+
+```{r}
+a = 0.6 * 0.7^4 * 0.3^6
+b = 0.4 * 0.4^4 * 0.6^6
+a/(a+b)
+```
+
+
+$$
 P(C_B | D_1) = 1 - P(C_A | D_1) \approx 0.82
 $$
+
+```{r}
+b/(a+b)
+```
+
 
 For $D_2$ we have that $k = 8$ we have:
 
 $$
-P(C_A | D_1) = \frac{0.6*{10 \choose 8} * 0.7^8 * 0.3^2}{0.6*{10 \choose 8} * 0.7^8 * 0.3^2 + 0.4*{10 \choose 8} * 0.4^8 * 0.6^2} \approx 0.97 \\
+P(C_A | D_1) = \frac{0.6 * 0.7^8 * 0.3^2}{0.6 * 0.7^8 * 0.3^2 + 0.4 * 0.4^8 * 0.6^2} \approx 0.97
+$$
+```{r}
+a = 0.6 * 0.7^8 * 0.3^2
+b = 0.4 * 0.4^8 * 0.6^2
+a/(a+b)
+```
+
+$$
 P(C_B | D_1) = 1 - P(C_A | D_1) \approx 0.03
 $$
+
+```{r}
+b/(a+b)
+```
+
 
 Lastly, the update of the mixing weights $P(C_A)$ and $P(C_B)$ is given by the following expression:
 
 $$
-P(C_i) = \frac{P(C_i | D_1) + P(C_i | D_2)}{2} \\
+P(C_i) = \frac{P(C_i | D_1) + P(C_i | D_2)}{2} 
 $$
 Therefore:
 
 $$
-P(C_A) = \frac{0.97 + 0.18}{2} = 0.575 \\
+P(C_A) = \frac{0.97 + 0.18}{2} = 0.575
+$$
+```{r}
+(0.97+0.18)/2
+```
+
+$$
 P(C_B) = \frac{0.82 + 0.103}{2} = 0.425 
 $$
 
-## Problem 2
+```{r}
+(0.82+0.103)/2
+```
+
+# Problem 2
 
 In this problem, you will implement the EM algorithm for the coin toss problem in R.
 
@@ -114,19 +153,22 @@ coin_EM <- function(D, k, lambda, theta, tolerance = 1e-2) {
     ### YOUR CODE STARTS ###
     
     # Compute the responsibilities
-    a <- lambda[1] * dbinom(apply(D, 1, sum), 100, theta[1])
-    b <- lambda[2] * dbinom(apply(D, 1, sum), 100, theta[2])
+    P <- rbind(theta[1]^rowSums(D) * (1 - theta[1])^(dim(D)[2] - rowSums(D)), 
+               theta[2]^rowSums(D) * (1 - theta[2])^(dim(D)[2] - rowSums(D)))
+    a <- lambda[1] * P[1, ]
+    b <- lambda[2] * P[2, ]
     gamma[1, ] <- a/(a + b)
     gamma[2, ] <- b/(a + b)
     
     # Update expected complete-data (hidden) log-likelihood
-    P <- rbind(dbinom(apply(D, 1, sum), 100, theta[1]), 
-               dbinom(apply(D, 1, sum), 100, theta[2]))
     ll_hid = sum(gamma * log(lambda*P))
     
     # Update observed log-likelihood
-    ## TODO:
-    ll_obs = ll_hid - entropy + kl_divergence
+    if (prod(a) + prod(b) == 0) {
+      ll_obs = 0
+    } else {
+      ll_obs = log(prod(a) + prod(b))
+    }
     
     # Recompute difference between two iterations
     diff = ll_obs - ll_obs_old
@@ -138,15 +180,14 @@ coin_EM <- function(D, k, lambda, theta, tolerance = 1e-2) {
     ### YOUR CODE STARTS ###
     
     # Recompute priors (mixture weights)
-    lambda = apply(gamma, 1, sum) / N
+    lambda = rowSums(gamma) / N
     
     # Recompute probability of heads for each coin
-    ## idea for this expression: http://karlrosaen.com/ml/notebooks/em-coin-flips/
+    num_h=rowSums(D)
+    count_h=gamma%*%num_h
+    count_t=(1-gamma)%*%(dim(D)[2]-num_h)
     
-    theta[1] = sum(gamma[1, ] * apply(D, 1, sum)) / 
-               sum(gamma[1, ] * 100)
-    theta[2] = sum(gamma[2, ] * apply(D, 1, sum)) / 
-               sum(gamma[2, ] * 100)
+    theta=t(count_h/(count_h+count_t))
     
     ### YOUR CODE ENDS ###
     
@@ -170,22 +211,31 @@ Probability of heads:
 
 ```{r}
 ## YOUR CODE ##
+res$theta
 ```
 
 Mixture weights:
 
 ```{r}
 ## YOUR CODE ##
+res$lambda
 ```
 
 Heatmap of responsibilities:
 
 ```{r}
 ## YOUR CODE ##
+heatmap(t(res$gamma),Rowv=NA,Colv=NA)
 ```
 
 How many observations belong to each coin?
 
 ```{r}
 ## YOUR CODE ##
+# Coin 1
+obs_1 = sum(res$gamma[1,]>res$gamma[2,])
+obs_1
+
+# Coin 2
+dim(D)[1]-obs_1
 ```
