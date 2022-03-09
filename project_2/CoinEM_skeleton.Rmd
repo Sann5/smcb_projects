@@ -120,10 +120,16 @@ coin_EM <- function(D, k, lambda, theta, tolerance = 1e-2) {
     gamma[2, ] <- b/(a + b)
     
     # Update expected complete-data (hidden) log-likelihood
+    P <- rbind(dbinom(apply(D, 1, sum), 100, theta[1]), 
+               dbinom(apply(D, 1, sum), 100, theta[2]))
+    ll_hid = sum(gamma * log(lambda*P))
     
     # Update observed log-likelihood
+    ## TODO:
+    ll_obs = ll_hid - entropy + kl_divergence
     
     # Recompute difference between two iterations
+    diff = ll_obs - ll_obs_old
     
     ### YOUR CODE ENDS ###
     
@@ -132,8 +138,15 @@ coin_EM <- function(D, k, lambda, theta, tolerance = 1e-2) {
     ### YOUR CODE STARTS ###
     
     # Recompute priors (mixture weights)
+    lambda = apply(gamma, 1, sum) / N
     
     # Recompute probability of heads for each coin
+    ## idea for this expression: http://karlrosaen.com/ml/notebooks/em-coin-flips/
+    
+    theta[1] = sum(gamma[1, ] * apply(D, 1, sum)) / 
+               sum(gamma[1, ] * 100)
+    theta[2] = sum(gamma[2, ] * apply(D, 1, sum)) / 
+               sum(gamma[2, ] * 100)
     
     ### YOUR CODE ENDS ###
     
