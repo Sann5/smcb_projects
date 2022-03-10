@@ -1,5 +1,7 @@
 ---
 title: "Project 2 EM Algorithm"
+author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
+date: "10/03/2022"
 output: pdf_document
 ---
 
@@ -164,14 +166,10 @@ coin_EM <- function(D, k, lambda, theta, tolerance = 1e-2) {
     ll_hid = sum(gamma * log(lambda*P))
     
     # Update observed log-likelihood
-    if (prod(a) + prod(b) == 0) {
-      ll_obs = 0
-    } else {
-      ll_obs = log(prod(a) + prod(b))
-    }
+    ll_obs = sum(log(apply(P*lambda, 2, sum)))
     
     # Recompute difference between two iterations
-    diff = ll_obs - ll_obs_old
+    diff = abs(ll_obs - ll_obs_old)
     
     ### YOUR CODE ENDS ###
     
