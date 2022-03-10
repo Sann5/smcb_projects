@@ -223,7 +223,7 @@ Heatmap of responsibilities:
 
 ```{r}
 ## YOUR CODE ##
-heatmap(t(res$gamma),Rowv=NA,Colv=NA)
+heatmap(t(res$gamma),Rowv=NA,Colv=NA, scale="column")
 ```
 
 How many observations belong to each coin?
