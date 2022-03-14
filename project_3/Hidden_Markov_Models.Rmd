@@ -121,7 +121,7 @@ rvec=r$vectors
 lam<-r$values
 
 rvec%*%diag(lam)%*%ginv(rvec)
-pi_eig<-lvec[1,]/sum(lvec[1,])
+#pi_eig<-lvec[1,]/sum(lvec[1,])
 sum(pi_eig)
 pi_eig %*% Tr
 
@@ -195,16 +195,41 @@ write.table(PNew_data, file='proteins_new_pedicted.tsv', quote=FALSE, sep='\t')
 
 
 ```{r}
-#DOES NOT WORK YET
+#TAKES A WHILE TO RUN
 ## Bootstrapping
 set.seed(0)
 library(boot)
-n<-length(Train_data$KnownPath)
-Bootstrapsamples<-matrix()
-#bootTau<-function(dd,i) cor(dd$var1[i], dd$var2[i], use = "complete.obs")
-boot_cor<-boot(Train_data, Get_Parameters(Train_data,unique.ss,unique.aa), 10)   #anzahl replicates
-boot_cor
-boot.ci(boot_cor)
+#Number of bootstraps
+nbst<-1000
+#Resample the Parameters 
+resamples<-lapply(1:nbst,function(x)
+  Get_Parameters(Train_data[sample(nrow(Train_data),replace = TRUE),],unique.ss,unique.aa)
+  );
+
+
+Ilist<-lapply(resamples,'[[',1)
+Trlist<-lapply(resamples,'[[',2)
+Elist<-lapply(resamples,'[[',3)
+
+#Calculate the Confidence Intervalls
+I.mean<- apply(simplify2array(Ilist),c(1,2),mean)
+I.sd<- apply(simplify2array(Ilist),c(1,2),sd)
+Tr.mean<- apply(simplify2array(Trlist),c(1,2),mean)
+Tr.sd<- apply(simplify2array(Trlist),c(1,2),sd)
+E.mean<- apply(simplify2array(Elist),c(1,2),mean)
+E.sd<- apply(simplify2array(Elist),c(1,2),sd)
+
+I.lowerCI <- I.mean - 1.96 * I.sd /sqrt(nbst)
+I.upperCI <- I.mean + 1.96 * I.sd /sqrt(nbst)
+
+Tr.lowerCI <- Tr.mean - 1.96 * Tr.sd /sqrt(nbst)
+Tr.upperCI <- Tr.mean + 1.96 * Tr.sd /sqrt(nbst)
+
+E.lowerCI <- E.mean - 1.96 * E.sd /sqrt(nbst)
+E.upperCI <- E.mean + 1.96 * E.sd /sqrt(nbst)
+
+
+
 
 ```
 
@@ -229,7 +254,7 @@ summary(viterbiaccuracy)
 #Get vector of accuracy of randomly guessed secondary structures
 randomaccuracy<-vector()
 for (i in 1:(nrow(PTest_data))){
-  sampled=sample(unique.ss, nchar(Test_data$KnownPath[i]),replace = TRUE) #ramdom sampling create sequence
+  sampled=sample(unique.ss, nchar(Test_data$KnownPath[i]),replace = TRUE) #ramdom sampling seq--> ADD WEIGHTS/PROBS
   given = unlist(strsplit(PTest_data$KnownPath[i],""))
   randomaccuracy<-c(randomaccuracy,sum(given==sampled)/nchar(PTest_data$PredictedStructure[i]))
 }
