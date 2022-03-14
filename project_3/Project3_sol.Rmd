@@ -1,0 +1,28 @@
+---
+title: "Project 3"
+author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
+date: "3/14/2022"
+output: pdf_document
+---
+
+## Problem 6: Hidden Markov Models
+### (a) What is the maximum number of parameters to define the HMM?
+Taking into account that,
+
+1. each hidden variable $Z$ can take on $K$ different values,
+2. each observed variable $X$ can each take on $M$ different values,
+3. and that the HMM has $L$ different states, 
+
+we have the following parameters in the model:
+
+* Initial state probabilities: $I_k = P(Z_1 = k)$
+* Transition probabilities: $T_{kk'} = P(Z_n = k' \mid  Z_{n-1} = k)$
+* Emission probabilities: $E_{km} = P(X_n = m \mid Z_n = k)$
+
+Since the $\sum_k I_k = 1$ we only need to define $K-1$ initial state probabilities. 
+
+Given that $Z_{n-1} = k$, there are $K$ transition probabilities into state $Z_{n}$, one for each value that $Z_n$ can take. Since $\sum_{k'=1}^K P(Z_n = k' \mid  Z_{n-1} = k) = 1$ we only need to define $K-1$ transition probabilities for each possible imputation of $Z_{n-1} = k$. Hence we need to define $K*(K-1)$ transition probabilities per $(Z_n, Z_{n-1})$ pair. Because we have $L-1$ such pairs we then need overall $K*(K-1)*(L-1)$ transition probabilities.
+
+Similarly because $\sum_{m=1}^M P(X_n = m \mid Z_n = k) = 1$, and $Z_{n}$ can take on $K$ different values, we need to define overall $K*(M-1)$ emission probabilities per state. Because we $L$ of these we therefore need to define $K*(M-1)*L$ emission probabilities overall. 
+
+In sum we need to define $(K-1) + K(K-1)(L-1) + K(M-1)L$ parameters. This is equal to $K^2(L - 1) + K(2 - 2L + ML) - 1$ parameters.
