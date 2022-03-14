@@ -1,0 +1,266 @@
+---
+title: "Project 3 Hidden Markov Models"
+output: pdf_document
+---
+
+## Problem 1
+
+## (a) Maximum number of parameters to define the HMM
+
+
+$$
+lol
+$$
+
+
+## (b) What is the stationary distribution π? 
+
+
+$$
+lol
+$$
+
+
+
+## Problem 2
+
+In this problem, we will try Predicting protein secondary structure using HMMs.
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+## (a) Load data
+
+We first read the data stored in the file proteins_train.tsv, proteins_test.tsv and proteins_new.tsv. 
+
+```{r}
+# read the data into D
+Train_data <- read.table("./data/proteins_train.tsv",col.names=c("ProtName","AminoAcids","KnownPath"))
+# read the data into D
+Test_data <- read.table("./data/proteins_test.tsv",col.names=c("ProtName","AminoAcids","KnownPath") )
+# read the data into D
+New_data <- read.table("./data/proteins_new.tsv",col.names=c("ProtName","AminoAcids"))
+
+```
+
+## (b) Get the parameters
+
+Estimate the vector of initial state probabilities I, the matrix of transition probabilities T and the matrix for emission probabilities E by maximum likelihood
+
+```{r}
+#characters
+unique.ss <- c("B", "C", "E", "G", "H", "I", "S", "T")
+unique.aa <- c("A", "C", "D", "E", "F", "G", "H", "I",
+                   "K", "L", "M", "N", "P", "Q", "R", "S",
+                   "T", "U", "V", "W", "X", "Y")
+```
+
+
+```{r}
+Get_Parameters<-function(Train_data,unique.ss,unique.aa){ 
+  
+  # Vector of initial state probabilities
+  I<-vector()
+  for(i in unique.ss) {I<-c(I,(sum(str_count(substr(Train_data$KnownPath,1,1),i))/nrow(Train_data)))}
+  
+  
+  # Matrix of transition probabilities
+  Tr<- matrix(0,length(unique.ss),length(unique.ss))
+  for (i in 1:(nrow(Train_data))){
+    for(j in 1:(nchar(Train_data$KnownPath[i])-1)){
+      from=which(unique.ss == substr(Train_data$KnownPath[i], j, j))
+      to=which(unique.ss == substr(Train_data$KnownPath[i], j+1, j+1))
+      Tr[from,to]=Tr[from,to]+1
+    }
+  }
+  Tr<-sweep(Tr, 1, rowSums(Tr)-Tr, FUN = '/')
+  
+  # Matrix for emission probabilities
+  E<- matrix(0,length(unique.ss),length(unique.aa))
+  for (i in 1:(nrow(Train_data))){
+    for(j in 1:(nchar(Train_data$KnownPath[i]))){ 
+      aa=which(unique.aa == substr(Train_data$AminoAcids[i], j, j))
+      ss=which(unique.ss == substr(Train_data$KnownPath[i], j, j))
+      E[ss,aa]=E[ss,aa]+1
+    }
+  }
+  E<-sweep(E, 2, rowSums(E), FUN = '/')
+
+params<-list(I=I,Tr=Tr,E=E)
+return(params)
+}
+```
+
+```{r}
+#Call function and get parameters
+varnamess<-"KnownPath"
+params<-Get_Parameters(Train_data,unique.ss,unique.aa)
+I=params$I
+Tr=params$Tr
+E=params$E
+
+```
+
+
+## (c) Estimate the stationary distribution π of the Markov chain 
+
+Estimate the stationary distribution π of the Markov chain by solving the eigenvalue problem
+and by using a brute-force approach
+
+```{r}
+# NOT DONE YET : CODE DOES NOT WORK
+
+#Solving eigenvalue problem
+library(expm)    
+# Get the eigenvectors of P, note: R returns right eigenvectors
+r=eigen(Tr)
+rvec=r$vectors
+# The eigenvalues
+lam<-r$values
+
+rvec%*%diag(lam)%*%ginv(rvec)
+#pi_eig<-lvec[1,]/sum(lvec[1,])
+sum(pi_eig)
+pi_eig %*% Tr
+
+
+#Brute-force approach
+pi_bru <- (Tr %^% 100)[1,]
+pi_bru
+
+
+pi_bru - pi_bru%*%Tr
+```
+
+## (d) Predict with Viterbi algorithm
+
+Predict the latent state sequence Z of a protein’s amino acid sequence X using the Viterbi algorithm:
+
+Viterbi function:
+```{r}
+viterbi <- function(E, Tr, I, p) {
+    .as.array <- function(.) stringr::str_split(., "")[[1]]
+    unique.ss <- c("B", "C", "E", "G", "H", "I", "S", "T")
+    unique.aa <- c("A", "C", "D", "E", "F", "G", "H", "I",
+                   "K", "L", "M", "N", "P", "Q", "R", "S",
+                   "T", "U", "V", "W", "X", "Y")
+    for (k in seq(nrow(p))) {
+        sequence <- p$AminoAcids[k]
+        aa.vec <- .as.array(sequence) %>% match(unique.aa)
+        P      <- matrix(0, nrow(E), length(aa.vec))
+        Ptr    <- matrix(0, nrow(E), length(aa.vec))
+        
+        ## sets the paths
+        for (i in seq(length(aa.vec))) {
+            if (i == 1) {
+                P[, i] <- I + E[, aa.vec[i]]
+            } else {
+                for (j in seq(nrow(E))) {
+                    p.loc    <- P[, i - 1] + Tr[, j] + E[j, aa.vec[i]]
+                    P[j, i] <- max(p.loc)
+                    Ptr[j, i] <- which.max(p.loc)
+                }
+            }
+        }
+        
+        ## backtrace: computes the most likely path
+        Phi <- vector(mode="integer",   length=length(aa.vec))
+        Phi[length(Phi)] <- which.max(P[, ncol(P)])
+        ## we start at the back, just as with Needleman-Wunsch or Smith-Waterman
+        for (i in seq(from=length(aa.vec), to=2)) {
+            Phi[i - 1] <- Ptr[Phi[i], i]
+        }
+        
+        states <- unique.ss[Phi]
+        p$PredictedStructure[k] <- paste(states, collapse="")
+    }
+    return(p)
+}
+
+```
+
+Call function & export new table:
+
+```{r}
+
+PNew_data<-viterbi(E, Tr, I, New_data)
+PTest_data<-viterbi(E, Tr, I, Test_data)
+write.table(PNew_data, file='proteins_new_pedicted.tsv', quote=FALSE, sep='\t')
+
+```
+
+## (e) Estimate confidence intervals for each parameter in I, E and T with bootstrapping
+
+
+```{r}
+#TAKES A WHILE TO RUN
+## Bootstrapping
+set.seed(0)
+library(boot)
+#Number of bootstraps
+nbst<-1000
+#Resample the Parameters 
+resamples<-lapply(1:nbst,function(x)
+  Get_Parameters(Train_data[sample(nrow(Train_data),replace = TRUE),],unique.ss,unique.aa)
+  );
+
+
+Ilist<-lapply(resamples,'[[',1)
+Trlist<-lapply(resamples,'[[',2)
+Elist<-lapply(resamples,'[[',3)
+
+#Calculate the Confidence Intervalls
+I.mean<- apply(simplify2array(Ilist),c(1,2),mean)
+I.sd<- apply(simplify2array(Ilist),c(1,2),sd)
+Tr.mean<- apply(simplify2array(Trlist),c(1,2),mean)
+Tr.sd<- apply(simplify2array(Trlist),c(1,2),sd)
+E.mean<- apply(simplify2array(Elist),c(1,2),mean)
+E.sd<- apply(simplify2array(Elist),c(1,2),sd)
+
+I.lowerCI <- I.mean - 1.96 * I.sd /sqrt(nbst)
+I.upperCI <- I.mean + 1.96 * I.sd /sqrt(nbst)
+
+Tr.lowerCI <- Tr.mean - 1.96 * Tr.sd /sqrt(nbst)
+Tr.upperCI <- Tr.mean + 1.96 * Tr.sd /sqrt(nbst)
+
+E.lowerCI <- E.mean - 1.96 * E.sd /sqrt(nbst)
+E.upperCI <- E.mean + 1.96 * E.sd /sqrt(nbst)
+
+
+
+
+```
+
+## (f) Compute the accuracy of the predicted secondary structure
+
+
+```{r}
+viterbiaccuracy<-vector()
+for (i in 1:(nrow(PTest_data))){
+  predicted = unlist(strsplit(PTest_data$PredictedStructure[i],""))
+  given = unlist(strsplit(PTest_data$KnownPath[i],""))
+  viterbiaccuracy<-c(viterbiaccuracy,sum(given==predicted)/nchar(PTest_data$PredictedStructure[i]))
+}
+#Get summary
+summary(viterbiaccuracy)
+```
+
+
+## (g) Global accuracies of the Viterbi and the random approach
+
+```{r}
+#Get vector of accuracy of randomly guessed secondary structures
+randomaccuracy<-vector()
+for (i in 1:(nrow(PTest_data))){
+  sampled=sample(unique.ss, nchar(Test_data$KnownPath[i]),replace = TRUE) #ramdom sampling seq--> ADD WEIGHTS/PROBS
+  given = unlist(strsplit(PTest_data$KnownPath[i],""))
+  randomaccuracy<-c(randomaccuracy,sum(given==sampled)/nchar(PTest_data$PredictedStructure[i]))
+}
+#Get summary
+summary(randomaccuracy)
+
+boxplot(viterbiaccuracy,randomaccuracy,ylab='Accuracy',main='Boxplot of  global accuracies',names = c( 'Viterbi','Random'))
+
+```
