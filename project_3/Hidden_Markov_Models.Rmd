@@ -21,14 +21,13 @@ we have the following parameters in the model:
 
 Since the $\sum_k I_k = 1$ we only need to define $K-1$ initial state probabilities. 
 
-Given that $Z_{n-1} = k$, there are $K$ transition probabilities into state $Z_{n}$, one for each value that $Z_n$ can take. Since $\sum_{k'=1}^K P(Z_n = k' \mid  Z_{n-1} = k) = 1$ we only need to define $K-1$ transition probabilities for each possible imputation of $Z_{n-1} = k$. Hence we need to define $K*(K-1)$ transition probabilities. We are however assuming that these transition probabilities are all the same for all $(Z_n, Z_{n-1})$ pairs. 
+Given that $Z_{n-1} = k$, there are $K$ transition probabilities into state $Z_{n}$, one for each value that $Z_n$ can take. Since $\sum_{k'=1}^K P(Z_n = k' \mid  Z_{n-1} = k) = 1$ we only need to define $K-1$ transition probabilities for each possible imputation of $Z_{n-1} = k$. Hence we need to define $K*(K-1)$ transition probabilities.
 
-Similarly because $\sum_{m=1}^M P(X_n = m \mid Z_n = k) = 1$, and $Z_{n}$ can take on $K$ different values, we need to define overall $K*(M-1)$ emission probabilities (again asssuming that these are site independent). 
+Similarly because $\sum_{m=1}^M P(X_n = m \mid Z_n = k) = 1$, and $Z_{n}$ can take on $K$ different values, we need to define overall $K*(M-1)$ emission probabilities. 
 
 In sum we need to define $(K-1) + K(K-1) + K(M-1)$ parameters. This is equal to $K^2 + K(M-1) - 1$ parameters.
 
 ### (b) What is the stationary distribution $\pi$?
-
 $$
 \begin{bmatrix}
 \pi_1 & \pi_2
@@ -59,7 +58,7 @@ $$
 
 $$
 
-To find the stationary distribution $\pi \in \mathbb{R}^n$, is to obtain the spectral decomposition a Markov matrix. A $n \times n$ matrix is called a Markov matrix if all entries are non negative and the sum of each column vector is equal to 1 (in this case the transpose of our transition matrix). A Markov matrix always has an eigenvalue of 1, and all other eigenvalues are in absolute value smaller or equal to 1. The eigenvector that corresponds to the eigenvalue of 1 is the stationary distribution, since it satisfies that $T^T\pi = \pi$ (note that this is equivalent to $\pi^TT = \pi^T$). 
+To find the stationary distribution $\pi \in \mathbb{R}^n$, is to obtain the spectral decomposition of a Markov matrix. A $n \times n$ matrix is called a Markov matrix if all entries are non negative and the sum of each column vector is equal to 1 (in this case the transpose of our transition matrix). A Markov matrix always has an eigenvalue of 1, and all other eigenvalues are in absolute value smaller or equal to 1. The eigenvector that corresponds to the eigenvalue of 1 is the stationary distribution, since it satisfies that $T^T\pi = \pi$ (note that this is equivalent to $\pi^TT = \pi^T$). 
 
 ```{r}
 ## Define matrix
@@ -76,7 +75,7 @@ stat_dist
 t(trans_mat) %*% stat_dist
 ```
 
-Alternatively one could compute a very high power of $T^T$ (e.g. $(T^T)^n$) and obtain a matrix which columns contain the stationary distribution. An easy way to reason about this is that any matrix that is decomposable can be written as $A = S \Lambda S^{-1}$, where $S$ is the matrix of eigenvectors and $\Lambda$ is a diagonal matrix with the eigenvalues. One can show that the powers of such a matrix can be written as $A^n = S \Lambda^n S^{-1}$. Since $\Lambda$ is diagonal $\Lambda^n$ is also diagonal but with entries $\lambda_{ij}^n$, which are the eigenvalues to the power of $n$. Since we are dealing with a Markov matrix all other eigenvalues except the one equal to 1 will go to 0 as $n$ goes to infinity. This in turn will yield a matrix where the columns contain the stationary distribution.
+Alternatively one could compute a very high power of $T^T$ (e.g. $(T^T)^n$) and obtain a matrix which columns contain the stationary distribution. An easy way to reason about this is that any matrix that is diagonalizable can be written as $A = S \Lambda S^{-1}$, where $S$ is the matrix of eigenvectors and $\Lambda$ is a diagonal matrix with the eigenvalues. One can show that the powers of such a matrix can be written as $A^n = S \Lambda^n S^{-1}$. $\Lambda^n$ is also diagonal but the entries $\lambda_{ij}^n$, are the eigenvalues to the power of $n$. Since we are dealing with a Markov matrix all other eigenvalues except the one equal to 1 will go to 0 as $n$ goes to infinity. Then when evaluating $S \Lambda^n S^{-1}$ only the convector corresponding to the eigenvalue equal to 1 will survive the matrix multiplication. This in turn will yield a matrix where the columns contain the stationary distribution.
 
 ```{r}
 ## Define error
@@ -98,7 +97,7 @@ dist_mat
 n
 ```
 
-## Problem 2
+## Problem 7: Predicting protein secondary structure using HMMs
 
 In this problem, we will try Predicting protein secondary structure using HMMs.
 
@@ -107,21 +106,21 @@ In this problem, we will try Predicting protein secondary structure using HMMs.
 library(tidyverse)
 ```
 
-## (a) Load data
+### (a) Load data
 
 We first read the data stored in the file proteins_train.tsv, proteins_test.tsv and proteins_new.tsv. 
 
 ```{r}
 # read the data into D
-Train_data <- read.table("./data/proteins_train.tsv",col.names=c("ProtName","AminoAcids","KnownPath"))
+Train_data <- read.table("./data/proteins_train.tsv", col.names=c("ProtName","AminoAcids","KnownPath"))
 # read the data into D
 Test_data <- read.table("./data/proteins_test.tsv",col.names=c("ProtName","AminoAcids","KnownPath") )
 # read the data into D
-New_data <- read.table("./data/proteins_new.tsv",col.names=c("ProtName","AminoAcids"))
+New_data <- read.table("./data/proteins_new.tsv", col.names=c("ProtName","AminoAcids"))
 
 ```
 
-## (b) Get the parameters
+### (b) Get the parameters
 
 Estimate the vector of initial state probabilities I, the matrix of transition probabilities T and the matrix for emission probabilities E by maximum likelihood
 
@@ -176,18 +175,19 @@ params<-Get_Parameters(Train_data,unique.ss,unique.aa)
 I=params$I
 Tr=params$Tr
 E=params$E
-
 ```
 
 
-## (c) Estimate the stationary distribution π of the Markov chain 
+### (c) Estimate the stationary distribution $\pi$ of the Markov chain 
 
-Estimate the stationary distribution π of the Markov chain by solving the eigenvalue problem
+Estimate the stationary distribution $\pi$ of the Markov chain by solving the eigenvalue problem
 and by using a brute-force approach
 
 ```{r}
 #Solving eigenvalue problem
-library(expm)    
+library(expm)
+library(MASS)
+
 # Get the eigenvectors of P, note: R returns right eigenvectors
 r=eigen(Tr)
 rvec=r$vectors
@@ -203,15 +203,12 @@ pi_eig
 pi_bru <- (Tr %^% 1000)[1,]
 pi_bru
 
-
-
-
 #Is Stationary distribution of The two approaches the same?
 all.equal(pi_bru,pi_eig)
 
 ```
 
-## (d) Predict with Viterbi algorithm
+### (d) Predict with Viterbi algorithm
 
 Predict the latent state sequence Z of a protein’s amino acid sequence X using the Viterbi algorithm:
 
@@ -268,7 +265,7 @@ write.table(PNew_data, file='proteins_new_pedicted.tsv', quote=FALSE, sep='\t')
 
 ```
 
-## (e) Estimate confidence intervals for each parameter in I, E and T with bootstrapping
+### (e) Estimate confidence intervals for each parameter in I, E and T with bootstrapping
 
 
 ```{r,message=FALSE}
@@ -310,7 +307,7 @@ E.upperCI <- E.mean + 1.96 * E.sd /sqrt(nbst)
 
 ```
 
-## (f) Compute the accuracy of the predicted secondary structure
+### (f) Compute the accuracy of the predicted secondary structure
 
 
 ```{r}
@@ -325,7 +322,7 @@ summary(viterbiaccuracy)
 ```
 
 
-## (g) Global accuracies of the Viterbi and the random approach
+### (g) Global accuracies of the Viterbi and the random approach
 
 ```{r}
 #Get probability matrix for the ss characters
