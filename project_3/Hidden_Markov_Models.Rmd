@@ -192,7 +192,7 @@ library(expm)
 r=eigen(Tr)
 rvec=r$vectors
 # left eigenvectors are the inverse of the right eigenvectors
-lvec=ginv(r$vectors)
+lvec=MASS::ginv(r$vectors)
 # The eigenvalues
 lam<-r$values
 pi_eig<-lvec[1,]/sum(lvec[1,])
