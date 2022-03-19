@@ -167,12 +167,33 @@ Protdd<-parseProteins("./data/Unclassified_proteins.txt")
 ## (6) Obtain the log odds ratio and plot the results
 
 
-
 ```{r}
 #TO DO
+library(ggplot2)
+
+logsodd<-vector()
+
+#loop through all the sequences in protdd
+for(i in 1:length(Protdd)){
+  loGTP<-forward(GTPHMM,unlist(Protdd[i]))
+  loATP<-forward(ATPHMM,unlist(Protdd[i]))
+  logsodd <- c(logsodd,loGTP[[1]]-loATP[[1]])
+  
+}
+logsodd
+
+
+a <- barplot(logsodd,
+            col= ifelse(logsodd < 0,"red","blue"),
+            xaxt = "n", yaxt = "n"
+)
+
+
+y<-vector(1:length(logsodd))
+
+ggplot(logsodd) +geom_histogram()
 
 ```
-
 
 
 
