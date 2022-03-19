@@ -1,0 +1,125 @@
+---
+title: "Project 3"
+author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
+date: "3/14/2022"
+output: pdf_document
+---
+
+## Problem 8:  Profile HMMs: Estimating match emission probabilities
+### What are the estimated match emission probabilities of the profile HMM in Figure 1?
+
+
+
+```{r}
+## The Example Data
+
+bat <- c("A","G","-","-","-","C")
+rat <- c("A","-","A","G","-","C")
+cat <- c("A","G","-","-","-","C")
+gnat <- c("-","G","A","A","A","C")
+goat <- c("A","G","-","-","A","C")
+M <- rbind(bat,rat,cat,gnat,goat)
+
+# Alphabet
+A=c("A","C","G","T")
+
+```
+
+
+
+```{r}
+##For better training: Remove this chunk later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# Figure 1
+bat <- c("A","G","-","-","-","C","-","-","-")
+rat <- c("A","-","A","G","-","C","A","T","-")
+cat <- c("A","G","-","-","-","C","-","-","-")
+gnat <- c("-","G","A","A","A","C","A","A","A")
+goat <- c("A","G","-","-","A","C","-","-","A")
+M <- rbind(bat,rat,cat,gnat,goat)
+
+
+# Alphabet
+A=c("A","C","G","T")
+```
+
+Find out which positions are in Match state and which are in Insert state
+
+```{r}
+# Get the positions which are Insertstate and Match state
+match = which(colSums(M!="-")>(dim(M)[1]/2)) #Vector with Match positions
+insertion = c(1:dim(M)[2])[!c(1:dim(M)[2]) %in% match] #Vector with insert positions
+
+```
+
+
+```{r}
+#Matrix of all pos????????????????
+E=matrix(,0,dim(M)[2])
+for (n in A){
+  e<-apply(M==n,2,sum)
+  E <- rbind(E,e)
+}
+rownames(E)=A
+
+
+```
+
+Calculate the Emission probabilities of a match
+
+```{r}
+# Emission probabilities of match
+E_match_prob=t(t(E[,match]+1)/colSums(E[,match]+1))
+E_match_prob
+
+```
+
+
+
+## Problem 9: Estimating insert emission probabilities
+What are the estimated insert emission probabilities of the profile HMM in Figure 1?
+
+```{r}
+
+consecutive_in=?????????????????
+E_cons=matrix(,length(A),0)
+for (insert in consecutive_in){
+  s = rowSums(E[,insert])
+  E_cons = cbind(E_cons,s)
+}
+rownames(E_cons)=A
+
+# Emission probabilities of insertion
+E_insertion_prob=t(t(E_cons+1)/colSums(E_cons+1))
+E_insertion_prob
+
+```
+
+
+## Problem 10: Estimating transition probabilities
+What are the estimated transmission probabilities in the profile HMM in Figure 1?
+
+
+-----> CURRRENTLY DOING THIS
+
+```{r}
+# Emission probabilities of insertion
+E_insertion_prob=t(t(E_cons+1)/colSums(E_cons+1))
+
+Tr=matrix(FALSE,dim(M)[1],dim(M)[2])
+Tr[,match][M[,match]!='-']='M'
+Tr[,match][M[,match]=='-']='D'
+Tr[,insertion][M[,insertion]!='-']='I'
+
+```
+
+
+## Problem 11: Protein family membership classification
+
+
+```{r}
+
+```
+
+
+
+
