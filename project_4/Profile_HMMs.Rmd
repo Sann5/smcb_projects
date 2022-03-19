@@ -116,7 +116,60 @@ Tr[,insertion][M[,insertion]!='-']='I'
 ## Problem 11: Protein family membership classification
 
 
+## (1) Import functions
+
 ```{r}
+#Get Functions
+source("./code/profileHMM.R")
+```
+
+## (2) Read the two alignments
+
+```{r}
+#Read in Data
+GTPdd<-parseAlignment("./data/GTP_binding_proteins.txt")
+
+ATPdd<-parseAlignment("./data/ATPases.txt")
+
+```
+## (3) Parametrise two profile HMMs
+
+Parametrise two profile HMMs for each protein family
+
+```{r}
+#Get the profile HMMS
+
+GTPHMM<-learnHMM(GTPdd)
+
+ATPHMM<-learnHMM(GTPdd)
+
+```
+
+
+## (4) Highest match and highest insert emission frequencies
+
+
+```{r}
+#TO DO
+
+
+```
+
+## (5) Load the protein sequences into a list 
+
+```{r}
+#Load the protein sequence
+
+Protdd<-parseProteins("./data/Unclassified_proteins.txt")
+
+```
+
+## (6) Obtain the log odds ratio and plot the results
+
+
+
+```{r}
+#TO DO
 
 ```
 
