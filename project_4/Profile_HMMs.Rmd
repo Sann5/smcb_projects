@@ -80,7 +80,7 @@ What are the estimated insert emission probabilities of the profile HMM in Figur
 
 ```{r}
 
-consecutive_in=?????????????????
+consecutive_in=split(insertion, cumsum(c(1, diff(insertion) != 1)))
 E_cons=matrix(,length(A),0)
 for (insert in consecutive_in){
   s = rowSums(E[,insert])
