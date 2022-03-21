@@ -154,9 +154,8 @@ source("./code/profileHMM.R")
 
 ```{r}
 #Read in Data
-GTPdd<-parseAlignment("./data/GTP_binding_proteins.txt")
-
-ATPdd<-parseAlignment("./data/ATPases.txt")
+GTP_binding_proteins = parseAlignment("./data/GTP_binding_proteins.txt")
+ATPases = parseAlignment("./data/ATPases.txt")
 
 ```
 ## (3) Parametrise two profile HMMs
@@ -166,59 +165,133 @@ Parametrise two profile HMMs for each protein family
 ```{r}
 #Get the profile HMMS
 
-GTPHMM<-learnHMM(GTPdd)
+profileHMM_GTP = learnHMM(GTP_binding_proteins)
+profileHMM_ATPases = learnHMM(ATPases)
 
-ATPHMM<-learnHMM(GTPdd)
+```
+
+
+## (4) Highest match and highest insert emission frequencies for ATPases
+
+
+```{r,tidy=TRUE}
+#Highest match emission frequencies
+match_frequency_positions_ATPases = 
+  which(profileHMM_ATPases$mE == max(profileHMM_ATPases$mE,na.rm=TRUE), 
+        arr.ind = TRUE)[2]
+print(match_frequency_positions_ATPases)
+
+barplot(profileHMM_ATPases$mE[,match_frequency_positions_ATPases],
+        names.arg=rownames(profileHMM_ATPases), 
+        main = paste0("Highest match emission frequency for ATPases at position: ",
+                      match_frequency_positions_ATPases))
+
+#Highest insert emission frequencies
+insert_frequency_positions_ATPases = 
+  which(profileHMM_ATPases$iE == max(profileHMM_ATPases$iE,na.rm=TRUE), 
+        arr.ind = TRUE)[2]
+print(insert_frequency_positions_ATPases)
+
+barplot(profileHMM_ATPases$mE[,insert_frequency_positions_ATPases],
+        names.arg=rownames(profileHMM_ATPases), 
+        main = paste0("Highest insert emission frequency for ATPases at position: ",
+                      insert_frequency_positions_ATPases))
 
 ```
 
 
-## (4) Highest match and highest insert emission frequencies
+## (4) Highest match and highest insert emission frequencies for GTP
 
 
-```{r}
-#TO DO
+```{r, tidy=TRUE}
+#Highest match emission frequencies
+match_frequency_positions_GTP = 
+  which(profileHMM_GTP$mE == max(profileHMM_GTP$mE,na.rm=TRUE), 
+                                      arr.ind = TRUE)[2]
+print(match_frequency_positions_GTP)
 
+barplot(profileHMM_GTP$mE[,match_frequency_positions_GTP],
+        names.arg=rownames(profileHMM_GTP), 
+        main = paste0("Highest match emission frequency for GTP at position: ",
+                      match_frequency_positions_GTP))
 
+#Highest insert emission frequencies
+insert_frequency_positions_GTP = 
+  which(profileHMM_GTP$iE == max(profileHMM_GTP$iE,na.rm=TRUE), 
+                                       arr.ind = TRUE)[2]
+print(insert_frequency_positions_GTP)
+
+barplot(profileHMM_GTP$mE[,insert_frequency_positions_GTP],
+        names.arg=rownames(profileHMM_GTP), 
+        main = paste0("Highest insert emission frequency for GTP at position: ",
+                      insert_frequency_positions_GTP))
 ```
+
 
 ## (5) Load the protein sequences into a list 
 
 ```{r}
 #Load the protein sequence
 
-Protdd<-parseProteins("./data/Unclassified_proteins.txt")
+unclassifiedProteins <- parseProteins(proteinsFile = 
+                                        "./data/Unclassified_proteins.txt" )
 
 ```
 
 ## (6) Obtain the log odds ratio and plot the results
 
 
+```{r, tidy=TRUE}
+P_ATPases <- lapply(X = unclassifiedProteins, forward, HMM=profileHMM_ATPases)
+P_GTP <- lapply(X = unclassifiedProteins, forward, HMM=profileHMM_GTP)
+#Log-Odds Ratio of ATPases Profile HMM wrt GTP Profile HMM
+q <- unlist(P_ATPases)-unlist(P_GTP)
+plot(q,col=ifelse(q>=0,"red","blue"), 
+     main="Log Odds Ratio of ATPases Profile HMM wrt GTP Profile HMM",
+     ylab = "Log Odds Ratio", xlab = "Sequence Index")
+```
+
+
+```{r, tidy=TRUE}
+unclassifiedATPases = as.numeric(which(q >=0,arr.ind = TRUE))
+no_unclassifiedATPases = length(unclassifiedATPases)
+print(paste0("The number of predicted ATPases is ",no_unclassifiedATPases))
+print("The unclassified proteins that are ATPases have indices")
+print(unclassifiedATPases)
+
+unclassifiedGTP = as.numeric(which(q < 0,arr.ind = TRUE))
+no_unclassifiedGTP = length(unclassifiedGTP)
+print(paste0("The number of predicted GTPs is ",no_unclassifiedGTP))
+print("The unclassified proteins that are GTPs have indices")
+print(unclassifiedGTP)
+```
+
+
 ```{r}
-#TO DO
-library(ggplot2)
-
-logsodd<-vector()
-
-#loop through all the sequences in protdd
-for(i in 1:length(Protdd)){
-  loGTP<-forward(GTPHMM,unlist(Protdd[i]))
-  loATP<-forward(ATPHMM,unlist(Protdd[i]))
-  logsodd <- c(logsodd,loGTP[[1]]-loATP[[1]])
-  
-}
-logsodd
-
-
-a <- barplot(logsodd,
-            col= ifelse(logsodd < 0,"red","blue"),
-            xaxt = "n", yaxt = "n"
-)
-
-
-y<-vector(1:length(logsodd))
-
-ggplot(logsodd) +geom_histogram()
+# #TO DO
+# library(ggplot2)
+# 
+# logsodd<-vector()
+# 
+# #loop through all the sequences in protdd
+# for(i in 1:length(Protdd)){
+#   loGTP<-forward(GTPHMM,unlist(Protdd[i]))
+#   loATP<-forward(ATPHMM,unlist(Protdd[i]))
+#   logsodd <- c(logsodd,loGTP[[1]]-loATP[[1]])
+#   
+# }
+# logsodd
+# 
+# 
+# a <- barplot(logsodd,
+#             col= ifelse(logsodd < 0,"red","blue"),
+#             xaxt = "n", yaxt = "n"
+# )
+# 
+# 
+# y<-vector(1:length(logsodd))
+# 
+# ggplot(logsodd) +geom_histogram()
 
 ```
 
