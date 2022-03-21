@@ -8,8 +8,7 @@ output: pdf_document
 ## Problem 8:  Profile HMMs: Estimating match emission probabilities
 ### What are the estimated match emission probabilities of the profile HMM in Figure 1?
 
-
-
+The model
 ```{r}
 ## The Example Data
 
@@ -25,22 +24,6 @@ A=c("A","C","G","T")
 
 ```
 
-
-
-```{r}
-##For better training: Remove this chunk later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# Figure 1
-bat <- c("A","G","-","-","-","C","-","-","-")
-rat <- c("A","-","A","G","-","C","A","T","-")
-cat <- c("A","G","-","-","-","C","-","-","-")
-gnat <- c("-","G","A","A","A","C","A","A","A")
-goat <- c("A","G","-","-","A","C","-","-","A")
-M <- rbind(bat,rat,cat,gnat,goat)
-
-
-# Alphabet
-A=c("A","C","G","T")
-```
 
 Find out which positions are in Match state and which are in Insert state
 
@@ -98,17 +81,60 @@ E_insertion_prob
 ## Problem 10: Estimating transition probabilities
 What are the estimated transmission probabilities in the profile HMM in Figure 1?
 
-
------> CURRRENTLY DOING THIS
-
 ```{r}
-# Emission probabilities of insertion
-E_insertion_prob=t(t(E_cons+1)/colSums(E_cons+1))
+#Transition probabilities
+counts.only=FALSE
 
-Tr=matrix(FALSE,dim(M)[1],dim(M)[2])
-Tr[,match][M[,match]!='-']='M'
-Tr[,match][M[,match]=='-']='D'
-Tr[,insertion][M[,insertion]!='-']='I'
+#Get state Matrix
+SM=matrix(FALSE,dim(M)[1],dim(M)[2])
+SM[,match][M[,match]!='-']='M'
+SM[,match][M[,match]=='-']='D'
+SM[,insertion][M[,insertion]!='-']='I'
+
+#Initate Transition Matrix
+transitions <- c("MM","MD","MI","IM","ID","II","DM","DD","DI")
+Tr=matrix(0,length(transitions),dim(M)[2]+1)
+rownames(Tr)=transitions
+
+
+#Create the Transition counts for every possible szenario
+for (i in 1:dim(SM)[1]){
+  prev <- 'M' 	
+  prevStateNum <- 0 
+  for(j in 1:(dim(SM)[2])) {
+    newState<- SM[i,j]
+    if (newState==FALSE){
+      prevStateNum <- j
+      next
+    }
+    transition <- paste(prev, newState, sep="")
+    Tr[transition, prevStateNum +1] <- Tr[transition, prevStateNum +1] +1
+    prevStateNum <- j
+    prev <- newState
+  }
+  transition<- paste(prev, 'M', sep="")
+  Tr[transition, prevStateNum +1] <- Tr[transition, prevStateNum +1] +1
+}
+
+#Add the Insertion state columns to the corresponding match state
+for (insert in rev(consecutive_in)){
+  s = rowSums(Tr[,c(insert[1]-1,insert)])
+  Tr[,insert[1]-1]=s
+  Tr=Tr[,-insert] #Delete the insertion columns
+}
+
+
+#Add pseudo-count and Get the Transition probabilities
+if (!counts.only) {
+    Tr <- Tr+1
+    for(i in 1:ncol(Tr)) {
+      Tr[1:3,i] <- Tr[1:3,i] / sum(Tr[1:3,i])
+      Tr[4:6,i] <- Tr[4:6,i] / sum(Tr[4:6,i])
+      Tr[7:9,i] <- Tr[7:9,i] / sum(Tr[7:9,i])
+    }
+}
+
+Tr
 
 ```
 
