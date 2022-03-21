@@ -134,6 +134,7 @@ if (!counts.only) {
     }
 }
 
+colnames(Tr)=c(0:(ncol(Tr)-1))
 Tr
 
 ```
