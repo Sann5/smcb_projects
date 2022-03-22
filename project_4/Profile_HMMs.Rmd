@@ -70,6 +70,7 @@ for (insert in consecutive_in){
   E_cons = cbind(E_cons,s)
 }
 rownames(E_cons)=A
+colnames(E_cons)=c(1:ncol(E_cons))
 
 # Emission probabilities of insertion
 E_insertion_prob=t(t(E_cons+1)/colSums(E_cons+1))
