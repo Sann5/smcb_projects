@@ -143,37 +143,32 @@ Tr
 ## Problem 11: Protein family membership classification
 
 
-## (1) Import functions
-
+### (1) Import functions
 ```{r}
 #Get Functions
 source("./code/profileHMM.R")
 ```
 
-## (2) Read the two alignments
-
+### (2) Read the two alignments
 ```{r}
 #Read in Data
 GTP_binding_proteins = parseAlignment("./data/GTP_binding_proteins.txt")
 ATPases = parseAlignment("./data/ATPases.txt")
 
 ```
-## (3) Parametrise two profile HMMs
 
+### (3) Parametrise two profile HMMs
 Parametrise two profile HMMs for each protein family
 
 ```{r}
 #Get the profile HMMS
-
 profileHMM_GTP = learnHMM(GTP_binding_proteins)
 profileHMM_ATPases = learnHMM(ATPases)
 
 ```
 
 
-## (4) Highest match and highest insert emission frequencies for ATPases
-
-
+### (4) Highest match and highest insert emission frequencies for ATPases
 ```{r,tidy=TRUE}
 #Highest match emission frequencies
 match_frequency_positions_ATPases = 
@@ -200,9 +195,7 @@ barplot(profileHMM_ATPases$mE[,insert_frequency_positions_ATPases],
 ```
 
 
-## (4) Highest match and highest insert emission frequencies for GTP
-
-
+### (4) Highest match and highest insert emission frequencies for GTP
 ```{r, tidy=TRUE}
 #Highest match emission frequencies
 match_frequency_positions_GTP = 
@@ -228,22 +221,19 @@ barplot(profileHMM_GTP$mE[,insert_frequency_positions_GTP],
 ```
 
 
-## (5) Load the protein sequences into a list 
-
+### (5) Load the protein sequences into a list 
 ```{r}
 #Load the protein sequence
-
 unclassifiedProteins <- parseProteins(proteinsFile = 
                                         "./data/Unclassified_proteins.txt" )
 
 ```
 
-## (6) Obtain the log odds ratio and plot the results
-
-
+### (6) Obtain the log odds ratio and plot the results
 ```{r, tidy=TRUE}
 P_ATPases <- lapply(X = unclassifiedProteins, forward, HMM=profileHMM_ATPases)
 P_GTP <- lapply(X = unclassifiedProteins, forward, HMM=profileHMM_GTP)
+
 #Log-Odds Ratio of ATPases Profile HMM wrt GTP Profile HMM
 q <- unlist(P_ATPases)-unlist(P_GTP)
 plot(q,col=ifelse(q>=0,"red","blue"), 
