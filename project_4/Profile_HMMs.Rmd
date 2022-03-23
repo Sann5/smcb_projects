@@ -1,7 +1,7 @@
 ---
-title: "Project 3"
+title: "Project 4"
 author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
-date: "3/14/2022"
+date: "3/24/2022"
 output: pdf_document
 ---
 
@@ -180,7 +180,9 @@ print(match_frequency_positions_ATPases)
 barplot(profileHMM_ATPases$mE[,match_frequency_positions_ATPases],
         names.arg=rownames(profileHMM_ATPases), 
         main = paste0("Highest match emission frequency for ATPases at position: ",
-                      match_frequency_positions_ATPases))
+                      match_frequency_positions_ATPases), 
+        xlab = "Symbols", 
+        ylab = "Match emission frequency")
 
 #Highest insert emission frequencies
 insert_frequency_positions_ATPases = 
@@ -191,7 +193,9 @@ print(insert_frequency_positions_ATPases)
 barplot(profileHMM_ATPases$mE[,insert_frequency_positions_ATPases],
         names.arg=rownames(profileHMM_ATPases), 
         main = paste0("Highest insert emission frequency for ATPases at position: ",
-                      insert_frequency_positions_ATPases))
+                      insert_frequency_positions_ATPases), 
+        xlab = "Symbols", 
+        ylab = "Insert emission frequency")
 
 ```
 
@@ -207,7 +211,9 @@ print(match_frequency_positions_GTP)
 barplot(profileHMM_GTP$mE[,match_frequency_positions_GTP],
         names.arg=rownames(profileHMM_GTP), 
         main = paste0("Highest match emission frequency for GTP at position: ",
-                      match_frequency_positions_GTP))
+                      match_frequency_positions_GTP), 
+        xlab = "Symbols", 
+        ylab = "Match emission frequency")
 
 #Highest insert emission frequencies
 insert_frequency_positions_GTP = 
@@ -218,7 +224,9 @@ print(insert_frequency_positions_GTP)
 barplot(profileHMM_GTP$mE[,insert_frequency_positions_GTP],
         names.arg=rownames(profileHMM_GTP), 
         main = paste0("Highest insert emission frequency for GTP at position: ",
-                      insert_frequency_positions_GTP))
+                      insert_frequency_positions_GTP), 
+        xlab = "Symbols", 
+        ylab = "Insert emission frequency")
 ```
 
 
@@ -255,36 +263,10 @@ no_unclassifiedGTP = length(unclassifiedGTP)
 print(paste0("The number of predicted GTPs is ",no_unclassifiedGTP))
 print("The unclassified proteins that are GTPs have indices")
 print(unclassifiedGTP)
+print("Yes, for each protein there is a clear answer since 
+      the log odds ratio is strictly above or below zero.")
 ```
 
-
-```{r}
-# #TO DO
-# library(ggplot2)
-# 
-# logsodd<-vector()
-# 
-# #loop through all the sequences in protdd
-# for(i in 1:length(Protdd)){
-#   loGTP<-forward(GTPHMM,unlist(Protdd[i]))
-#   loATP<-forward(ATPHMM,unlist(Protdd[i]))
-#   logsodd <- c(logsodd,loGTP[[1]]-loATP[[1]])
-#   
-# }
-# logsodd
-# 
-# 
-# a <- barplot(logsodd,
-#             col= ifelse(logsodd < 0,"red","blue"),
-#             xaxt = "n", yaxt = "n"
-# )
-# 
-# 
-# y<-vector(1:length(logsodd))
-# 
-# ggplot(logsodd) +geom_histogram()
-
-```
 
 
 
