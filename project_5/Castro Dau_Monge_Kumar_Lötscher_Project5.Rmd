@@ -1,0 +1,60 @@
+---
+title: "Project 5"
+author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
+date: '2022-03-31'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Problem 12
+#TODO
+
+# Problem 13
+### 1. What is the joint probability $P(X,Z|T)$ of the tree?
+\begin{equation*}
+  P(X,Z|T) = P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3})P(Z_{1}|Z_{3})P(X_{4}|Z_{2})P(X_{3}|Z_{2})P(X_{2}|Z_{1})P(X_{1}|Z_{1})
+\end{equation*}
+
+### 2. How many summation steps would be required for the naive calculation of $P(X|T)$ via brute-force marginalization over the hidden nodes Z?
+The number of summation steps for the calculation of $P(X|T)$ would be:
+$4*4*(4 + 4) = 128$
+
+### 3. Rearrange the expression $P(X|T)$ such that the number of operations is minimized 2. How many summation steps are required now for the calculation of $P(X|T)$?
+
+# Problem 14
+```{r, echo = FALSE}
+library("phangorn")
+library("ape")
+```
+### 1. Install and load the R packages phangorn and ape. Load the alignment ParisRT.txt into memory using the function read.dna().
+```{r}
+alignment = read.dna("ParisRT.txt")
+```
+### 2. Create an initial tree topology for the alignment, using neighbour joining with the function NJ(). Base this on pairwise distances between sequences under the Kimura (1980) nucleotide substitution model, computed using the function dist.dna(). Plot the initial tree.
+```{r}
+tree = NJ(dist.dna(alignment,model = "K80"))
+plot.phylo(tree)
+```
+### 3. Use the function pml() to fit the Kimura model (model = "K80") to the above tree and the alignment. Note that the function expects data = phyDat(alignment). What is the log likelihood of the fitted model?
+```{r}
+likelihood = pml(tree, data = phyDat(alignment), model ="K80")
+```
+### 4. The function optim.pml() can be used to optimise parameters of a phylogenetic model. Find the optimal parameters of the Kimura (1980) nucleotide substitution model whilst the other parameters are held fixed. What are the values in the optimised rate matrix?
+```{r}
+likelihood_optimised_rate_only = optim.pml(likelihood, optQ = TRUE)
+```
+### 5. Optimise the Kimura model with respect to branch lengths, nucleotide substitution rates, and tree topology simultaneously. What is the log likelihood of the optimised model?
+```{r}
+likelihood_optimised = optim.pml(likelihood, optNni = TRUE, optEdge = TRUE, optQ = TRUE)
+```
+### 6. The function bootstrap.pml() fits phylogenetic models to bootstrap resamples of the data.Run it on the optimised model from step 5, but pass the argument optNni = TRUE to allow for a different topology for each bootstrap run. What, exactly, is being resampled?
+```{r}
+bootstrap = bootstrap.pml(x = likelihood_optimised, optNni = TRUE)
+```
+### 7. Use plotBS() with type = "phylogram" to plot the optimised tree (from step 5) with the bootstrap support on the edges. Which nurse ("Mme S" or "Mr D") is more likely to have infected the patient "Mme L"?
+```{r}
+plotBS(tree, BStrees = bootstrap, type = "phylogram")
+```
+Mme S is more likely to have infected the patient Mme L. From the tree, we see that with a bootstrap support of ~99% the the samples from Mme S and Mme L have a more recent common ancestor than those of Mr D and Mme L.
