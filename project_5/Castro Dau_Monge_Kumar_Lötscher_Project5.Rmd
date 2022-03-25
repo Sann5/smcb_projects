@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### 2. How many summation steps would be required for the naive calculation of $P(X|T)$ via brute-force marginalization over the hidden nodes Z?
 The number of summation steps for the calculation of $P(X|T)$ would be:
-$4*4*(4 + 4) = 128$
+$4*4*4*4 = 256$
 
 ### 3. Rearrange the expression $P(X|T)$ such that the number of operations is minimized 2. How many summation steps are required now for the calculation of $P(X|T)$?
 
@@ -30,7 +30,7 @@ library("ape")
 ```
 ### 1. Install and load the R packages phangorn and ape. Load the alignment ParisRT.txt into memory using the function read.dna().
 ```{r}
-alignment = read.dna("ParisRT.txt")
+alignment = read.dna("./ParisRT.txt")
 ```
 ### 2. Create an initial tree topology for the alignment, using neighbour joining with the function NJ(). Base this on pairwise distances between sequences under the Kimura (1980) nucleotide substitution model, computed using the function dist.dna(). Plot the initial tree.
 ```{r}
