@@ -8,10 +8,20 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-# Problem 12
-#TODO
+## Problem 12
+### 1. Show that: $\frac{d\textbf{P}(t)}{dt} = \textbf{RP}(t)$
+Using Chapman - Kolmogorov equation,
+\begin{equation*}
+\begin{split}
+\textbf{P}(dt + t) &= \textbf{P}(dt)\textbf{P}(t)\\ &= (\textbf{I} + \textbf{R}dt)\textbf{P}(t)\\ &= \textbf{P}(t) + \textbf{R}\textbf{P}(t)dt\\
+\frac{\textbf{P}(t + dt) - \textbf{P}(t)}{dt} &= \textbf{R}\textbf{P}(t)\\
+\implies \frac{dP}{dt} &= \textbf{R}\textbf{P}(t)\\
+\end{split}
+\end{equation*}
+Hence Proved.
 
-# Problem 13
+
+## Problem 13
 ### 1. What is the joint probability $P(X,Z|T)$ of the tree?
 \begin{equation*}
   P(X,Z|T) = P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3})P(Z_{1}|Z_{3})P(X_{4}|Z_{2})P(X_{3}|Z_{2})P(X_{2}|Z_{1})P(X_{1}|Z_{1})
@@ -23,7 +33,7 @@ $4*4*4*4 = 256$
 
 ### 3. Rearrange the expression $P(X|T)$ such that the number of operations is minimized 2. How many summation steps are required now for the calculation of $P(X|T)$?
 
-# Problem 14
+## Problem 14
 ```{r, echo = FALSE}
 library("phangorn")
 library("ape")
