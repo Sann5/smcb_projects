@@ -15,14 +15,18 @@ Using Chapman - Kolmogorov equation,
 \begin{split}
 \textbf{P}(dt + t) &= \textbf{P}(dt)\textbf{P}(t)\\ &= (\textbf{I} + \textbf{R}dt)\textbf{P}(t)\\ &= \textbf{P}(t) + \textbf{R}\textbf{P}(t)dt\\
 \frac{\textbf{P}(t + dt) - \textbf{P}(t)}{dt} &= \textbf{R}\textbf{P}(t)\\
-\implies \frac{dP}{dt} &= \textbf{R}\textbf{P}(t)\\
+\implies \frac{dP(t)}{dt} &= \textbf{R}\textbf{P}(t)\\
 \end{split}
 \end{equation*}
 Hence Proved.
 
+### 2. Show that $R\pi = 0$.
+We know that for the stationary distribution $\pi$ the following holds, $P(t)\pi = \pi$. Since we are dealing with convergence, the previous equation must hold for any time after $t$, so the following must also hold, $P(t + dt)\pi = \pi$. By way of the Chapman - Kolmogorov equation we can rewrite the previous equation as $P(dt + t)\pi = (I + Rdt)P(t)\pi$. Thus $P(dt + t)\pi = P(t)\pi + RdtP(t)\pi$. Since $P(t)\pi = \pi$, $P(dt + t)\pi = \pi + Rdt\pi$ and therefore $Rdt\pi$ must be 0  (since $dt$ is just a constant we can say that $R\pi = 0$). 
 
 ## Problem 13
 ### 1. What is the joint probability $P(X,Z|T)$ of the tree?
+Ommiting the conventionality on the tree $T$ for clearness.
+
 \begin{equation*}
   P(X,Z|T) = P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3})P(Z_{1}|Z_{3})P(X_{4}|Z_{2})P(X_{3}|Z_{2})P(X_{2}|Z_{1})P(X_{1}|Z_{1})
 \end{equation*}
@@ -31,7 +35,16 @@ Hence Proved.
 The number of summation steps for the calculation of $P(X|T)$ would be:
 $4*4*4*4 = 256$
 
-### 3. Rearrange the expression $P(X|T)$ such that the number of operations is minimized 2. How many summation steps are required now for the calculation of $P(X|T)$?
+### 3. Rearrange the expression $P(X|T)$ such that the number of operations is minimized. How many summation steps are required now for the calculation of $P(X|T)$?
+
+$$
+P(X|T) = \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} \sum_{Z_1} P(X,Z|T) \\
+= \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} \sum_{Z_1} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3})P(Z_{1}|Z_{3})P(X_{4}|Z_{2})P(X_{3}|Z_{2})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
+= \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
+= \sum_{Z_4} \sum_{Z_3} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4}) \sum_{Z_2} P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
+= \sum_{Z_4} P(Z_{4})P(X_{5}|Z_{4}) \sum_{Z_3} P(Z_{3}|Z_{4}) \sum_{Z_2} P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
+$$
+Because the terms inside the summations concerning $Z_1$ and $Z_2$ only depend on $Z_3$ we only need to calculate them once per $Z_3, Z_1$ and $Z_3, Z_2$ value pairs ($4(4+4) = 32$). Then we need to compute $P(Z_{3}|Z_{4})$ 16 times, once for each per $Z_4, Z_3$ value pair. Finally we need to compute $P(Z_{4})P(X_{5}|Z_{4})$ 4 times, once for each value $Z_4$ In total we compute $62$ terms, which we have to multiply in order to get the $256$ elements of the sum.
 
 ## Problem 14
 ```{r, echo = FALSE}
