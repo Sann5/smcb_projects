@@ -21,7 +21,7 @@ Using Chapman - Kolmogorov equation,
 Hence Proved.
 
 ### 2. Show that $R\pi = 0$.
-We know that for the stationary distribution $\pi$ the following holds, $P(t)\pi = \pi$. Since we are dealing with convergence, the previous equation must hold for any time after $t$, so the following must also hold, $P(t + dt)\pi = \pi$. By way of the Chapman - Kolmogorov equation we can rewrite the previous equation as $P(dt + t)\pi = (I + Rdt)P(t)\pi$. Thus $P(dt + t)\pi = P(t)\pi + RdtP(t)\pi$. Since $P(t)\pi = \pi$, $P(dt + t)\pi = \pi + Rdt\pi$ and therefore $Rdt\pi$ must be 0  (since $dt$ is just a constant we can say that $R\pi = 0$). 
+We know that for the stationary distribution $\pi$ the following holds, $P(t)\pi = \pi$. Since we are dealing with convergence, the previous equation must hold for any time after $t$, so the following must also hold, $P(t + dt)\pi = \pi$. By way of the Chapman - Kolmogorov equation we can rewrite the previous equation as $P(dt + t)\pi = (I + Rdt)P(t)\pi$. Thus $P(dt + t)\pi = P(t)\pi + RdtP(t)\pi$. Since $P(t)\pi = \pi$, $P(dt + t)\pi = \pi + Rdt\pi$ and therefore $Rdt\pi$ must be 0. Since $dt$ is just a constant we can say that $R\pi = 0$.
 
 ## Problem 13
 ### 1. What is the joint probability $P(X,Z|T)$ of the tree?
@@ -44,40 +44,60 @@ P(X|T) = \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} \sum_{Z_1} P(X,Z|T) \\
 = \sum_{Z_4} \sum_{Z_3} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4}) \sum_{Z_2} P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
 = \sum_{Z_4} P(Z_{4})P(X_{5}|Z_{4}) \sum_{Z_3} P(Z_{3}|Z_{4}) \sum_{Z_2} P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
 $$
-Because the terms inside the summations concerning $Z_1$ and $Z_2$ only depend on $Z_3$ we only need to calculate them once per $Z_3, Z_1$ and $Z_3, Z_2$ value pairs ($4(4+4) = 32$). Then we need to compute $P(Z_{3}|Z_{4})$ 16 times, once for each per $Z_4, Z_3$ value pair. Finally we need to compute $P(Z_{4})P(X_{5}|Z_{4})$ 4 times, once for each value $Z_4$ In total we compute $62$ terms, which we have to multiply in order to get the $256$ elements of the sum.
+Because the terms inside the summations concerning $Z_1$ and $Z_2$ only depend on $Z_3$ we only need to calculate them once per $Z_3, Z_1$ and $Z_3, Z_2$ value pairs ($4(4+4) = 32$). Then we need to compute $P(Z_{3}|Z_{4})$ 4 times, once for each per $Z_3$ value pair. Finally we need to compute $P(Z_{4})P(X_{5}|Z_{4})$ 4 times, once for each value $Z_4$ In total we compute $62$ terms.
 
 ## Problem 14
 ```{r, echo = FALSE}
 library("phangorn")
 library("ape")
 ```
+
 ### 1. Install and load the R packages phangorn and ape. Load the alignment ParisRT.txt into memory using the function read.dna().
+
 ```{r}
 alignment = read.dna("./ParisRT.txt")
 ```
+
 ### 2. Create an initial tree topology for the alignment, using neighbour joining with the function NJ(). Base this on pairwise distances between sequences under the Kimura (1980) nucleotide substitution model, computed using the function dist.dna(). Plot the initial tree.
+
 ```{r}
 tree = NJ(dist.dna(alignment,model = "K80"))
 plot.phylo(tree)
 ```
+
 ### 3. Use the function pml() to fit the Kimura model (model = "K80") to the above tree and the alignment. Note that the function expects data = phyDat(alignment). What is the log likelihood of the fitted model?
+
 ```{r}
 likelihood = pml(tree, data = phyDat(alignment), model ="K80")
+likelihood
 ```
+
 ### 4. The function optim.pml() can be used to optimise parameters of a phylogenetic model. Find the optimal parameters of the Kimura (1980) nucleotide substitution model whilst the other parameters are held fixed. What are the values in the optimised rate matrix?
+
 ```{r}
-likelihood_optimised_rate_only = optim.pml(likelihood, optQ = TRUE)
+likelihood_optimised_rate_only = optim.pml(likelihood, optQ = TRUE, optEdge = FALSE, model='K80')
+likelihood_optimised_rate_only
 ```
+
 ### 5. Optimise the Kimura model with respect to branch lengths, nucleotide substitution rates, and tree topology simultaneously. What is the log likelihood of the optimised model?
+
 ```{r}
 likelihood_optimised = optim.pml(likelihood, optNni = TRUE, optEdge = TRUE, optQ = TRUE)
+likelihood_optimised
 ```
-### 6. The function bootstrap.pml() fits phylogenetic models to bootstrap resamples of the data.Run it on the optimised model from step 5, but pass the argument optNni = TRUE to allow for a different topology for each bootstrap run. What, exactly, is being resampled?
-```{r}
+
+### 6. The function bootstrap.pml() fits phylogenetic models to bootstrap resamples of the data. Run it on the optimised model from step 5, but pass the argument optNni = TRUE to allow for a different topology for each bootstrap run. What, exactly, is being resampled?
+
+The specific sites in the alignment are being re-sampled to generate bootstrap alignments in which we can re-run our analysis in order to get confidence estimates. 
+
+```{r, results=FALSE, message=FALSE, warning=FALSE}
 bootstrap = bootstrap.pml(x = likelihood_optimised, optNni = TRUE)
 ```
+
 ### 7. Use plotBS() with type = "phylogram" to plot the optimised tree (from step 5) with the bootstrap support on the edges. Which nurse ("Mme S" or "Mr D") is more likely to have infected the patient "Mme L"?
+
 ```{r}
-plotBS(tree, BStrees = bootstrap, type = "phylogram")
+plotBS(likelihood_optimised$tree, BStrees = bootstrap, type = "phylogram")
 ```
+
 Mme S is more likely to have infected the patient Mme L. From the tree, we see that with a bootstrap support of ~99% the the samples from Mme S and Mme L have a more recent common ancestor than those of Mr D and Mme L.
