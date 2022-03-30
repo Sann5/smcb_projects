@@ -37,13 +37,15 @@ $4*4*4*4 = 256$
 
 ### 3. Rearrange the expression $P(X|T)$ such that the number of operations is minimized. How many summation steps are required now for the calculation of $P(X|T)$?
 
-$$
-P(X|T) = \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} \sum_{Z_1} P(X,Z|T) \\
-= \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} \sum_{Z_1} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3})P(Z_{1}|Z_{3})P(X_{4}|Z_{2})P(X_{3}|Z_{2})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
-= \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
-= \sum_{Z_4} \sum_{Z_3} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4}) \sum_{Z_2} P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
-= \sum_{Z_4} P(Z_{4})P(X_{5}|Z_{4}) \sum_{Z_3} P(Z_{3}|Z_{4}) \sum_{Z_2} P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
-$$
+\begin{equation*}
+\begin{split}
+P(X|T) =& \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} \sum_{Z_1} P(X,Z|T)\\
+=& \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} \sum_{Z_1} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3})P(Z_{1}|Z_{3})P(X_{4}|Z_{2})P(X_{3}|Z_{2})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
+=& \sum_{Z_4} \sum_{Z_3} \sum_{Z_2} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4})P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
+=& \sum_{Z_4} \sum_{Z_3} P(Z_{4})P(Z_{3}|Z_{4})P(X_{5}|Z_{4}) \sum_{Z_2} P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
+=& \sum_{Z_4} P(Z_{4})P(X_{5}|Z_{4}) \sum_{Z_3} P(Z_{3}|Z_{4}) \sum_{Z_2} P(Z_{2}|Z_{3}) P(X_{4}|Z_{2})P(X_{3}|Z_{2}) \sum_{Z_1} P(Z_{1}|Z_{3})P(X_{2}|Z_{1})P(X_{1}|Z_{1}) \\
+\end{split}
+\end{equation*}
 Because the terms inside the summations concerning $Z_1$ and $Z_2$ only depend on $Z_3$ we only need to calculate them once per $Z_3, Z_1$ and $Z_3, Z_2$ value pairs ($4(4+4) = 32$). Then we need to compute $P(Z_{3}|Z_{4})$ 4 times, once for each per $Z_3$ value pair. Finally we need to compute $P(Z_{4})P(X_{5}|Z_{4})$ 4 times, once for each value $Z_4$ In total we compute $62$ terms.
 
 ## Problem 14
@@ -71,21 +73,23 @@ plot.phylo(tree)
 likelihood = pml(tree, data = phyDat(alignment), model ="K80")
 likelihood
 ```
-
+The log-likelihood of the fitted model is $-3003.487$  
 ### 4. The function optim.pml() can be used to optimise parameters of a phylogenetic model. Find the optimal parameters of the Kimura (1980) nucleotide substitution model whilst the other parameters are held fixed. What are the values in the optimised rate matrix?
 
 ```{r}
-likelihood_optimised_rate_only = optim.pml(likelihood, optQ = TRUE, optEdge = FALSE, model='K80')
+likelihood_optimised_rate_only = 
+  optim.pml(likelihood, optQ = TRUE, optEdge = FALSE, model='K80')
 likelihood_optimised_rate_only
 ```
 
 ### 5. Optimise the Kimura model with respect to branch lengths, nucleotide substitution rates, and tree topology simultaneously. What is the log likelihood of the optimised model?
 
 ```{r}
-likelihood_optimised = optim.pml(likelihood, optNni = TRUE, optEdge = TRUE, optQ = TRUE)
+likelihood_optimised = 
+  optim.pml(likelihood, optNni = TRUE, optEdge = TRUE, optQ = TRUE)
 likelihood_optimised
 ```
-
+The log-likelihood of the optimised model is $-2849.789$.
 ### 6. The function bootstrap.pml() fits phylogenetic models to bootstrap resamples of the data. Run it on the optimised model from step 5, but pass the argument optNni = TRUE to allow for a different topology for each bootstrap run. What, exactly, is being resampled?
 
 The specific sites in the alignment are being re-sampled to generate bootstrap alignments in which we can re-run our analysis in order to get confidence estimates. 
