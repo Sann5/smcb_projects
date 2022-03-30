@@ -73,7 +73,7 @@ plot.phylo(tree)
 likelihood = pml(tree, data = phyDat(alignment), model ="K80")
 likelihood
 ```
-The log-likelihood of the fitted model is $-3003.487$  
+
 ### 4. The function optim.pml() can be used to optimise parameters of a phylogenetic model. Find the optimal parameters of the Kimura (1980) nucleotide substitution model whilst the other parameters are held fixed. What are the values in the optimised rate matrix?
 
 ```{r}
@@ -89,10 +89,10 @@ likelihood_optimised =
   optim.pml(likelihood, optNni = TRUE, optEdge = TRUE, optQ = TRUE)
 likelihood_optimised
 ```
-The log-likelihood of the optimised model is $-2849.789$.
+
 ### 6. The function bootstrap.pml() fits phylogenetic models to bootstrap resamples of the data. Run it on the optimised model from step 5, but pass the argument optNni = TRUE to allow for a different topology for each bootstrap run. What, exactly, is being resampled?
 
-The specific sites in the alignment are being re-sampled to generate bootstrap alignments in which we can re-run our analysis in order to get confidence estimates. 
+The specific sites in the alignment are being re-sampled to generate bootstrap alignments in which we can re-run our analysis in order to get confidence estimates.  
 
 ```{r, results=FALSE, message=FALSE, warning=FALSE}
 bootstrap = bootstrap.pml(x = likelihood_optimised, optNni = TRUE)
