@@ -1,0 +1,122 @@
+---
+title: "Project 6"
+author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
+date: '2022-04-11'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Problem 15: Monte Carlo estimation of an expected value
+### 1. Show that: $...$
+
+
+
+## Problem 16: Sampling in the Rain Network
+### a) Derive the expressions for P (C = T | R = T, S = T, W = T), P (C = T | R = F, S =T, W = T), P (R = T | C = T, S = T, W = T) and P (R = T | C = F, S = T, W = T) and compute their values.
+
+\begin{equation*}
+\begin{split}
+  P(C=T|R=T,S=T,W=T)&=P(C=T|R=T,S=T)&=\frac{P(C=T)P(S=T,R=T|C=T)}{P(S=T,R=T)}\\     &=\frac{P(C=T)P(S=T|C=T)P(R=T|C=T)}{P(C=T)P(S=T|C=T)P(R=T|C=T)+P(C=F)P(S=T|C=F)P(R=T|C=F)}\\
+&=\frac{0.5*0.1*0.8}{0.53*0.1*0.8+0.5*0.5*0.2}&=0.4444
+
+P(C=T|R=F,S=T,W=T)&=\frac{P(C=T)P(S=T|C=T)P(R=F|C=T)}{P(C=T)P(S=T|C=T)P(R=F|C=T)+P(C=F)P(S=T|C=F)P(R=F|C=F)}\\
+&=\frac{0.5*0.1*0.2}{0.5*0.1*0.2+0.5*0.5*0.8}&=0.04761905
+
+
+
+P(R=T|C=T,S=T,W=T)&=\frac{P(R=T|C=T,S=T)P(W=T|R=T,C=T,S=T)}{P(W=T|C=T,S=T)}&=\frac{P(R=T|C=T)P(W=T|R=T,S=T)}{P(W=T|C=T,S=T)}\\  &=\frac{P(R=T|C=T)P(W=T|R=T,S=T)}{P(R=T|C=T)P(W=T|R=T,S=T)+P(R=F|C=T)P(W=T|R=F,S=T)}\\
+&=\frac{0.8*0.99}{0.8*0.99+0.2*0.9}&=0.8148
+
+P(R=T|C=F,S=T,W=T)&=\frac{P(R=T|C=F)P(W=T|R=T,S=T)}{P(R=T|C=F)P(W=T|R=T,S=T)+P(R=F|C=F)P(W=T|R=F,S=T)}\\
+&=\frac{0.2*0.99}{0.2*0.99+0.8*0.9}&=0.2156863
+
+
+\end{split}
+\end{equation*}
+
+### b) Implement the Gibbs sampler for the Bayesian network 
+
+
+```{r, echo = FALSE}
+library("coda")
+
+```
+
+
+```{r}
+
+#DOES NOT WORK YET
+sampleGibbs <- function(start.a, start.b, n.sims, data){
+  # get sum, which is sufficient statistic
+  x <- sum(data)
+  # get n
+  n <- nrow(data)
+  # create empty matrix, allocate memory for efficiency
+  res <- matrix(NA, nrow = 2, ncol = 2)
+  res[1,] <- c(start.a,start.b)
+  for (i in 2:n.sims){
+    # sample the values
+    res[i,1] <- rgamma(1, shape = n+1,
+    rate = res[i-1,2]*x+1)
+    res[i,2] <- rgamma(1, shape = n+1,
+    rate = res[i,1]*x+1)
+  }
+return(res)
+}
+
+
+# run Gibbs sampler
+n.sims <- 100
+# return the result (res)
+res <- sampleGibbs(.25,.25,n.sims,data)
+res
+```
+
+
+### c) Estimate the marginal probability of rain, given that the sprinkler is on and the grass is wet
+
+```{r}
+
+```
+
+
+### d) Draw 50,000 samples instead of 100 using the Gibbs sampler
+
+```{r}
+
+```
+
+### e) Plot the relative frequencies of R = T and C = T up to each iteration t against t, for two independent runs of the sampler. Suggest a burn-in time based on this plot.
+
+```{r}
+
+```
+
+### f) Apply the Gelman and Rubin test 
+
+```{r}
+
+```
+
+### g) Provide plots for both variables Rain and Cloudy and suggest an interval for drawing approximately independent samples. 
+
+```{r}
+
+```
+
+### h)Re-estimate P (R = T | S = T, W = T) based on samples obtained after the suggested burn-in time and thinning.
+
+```{r}
+
+```
+
+### i)Compute the probability P (R = T | S = T, W = T) analytically. Compare with (c) and (h)
+and comment on your results.
+
+```{r}
+
+```
+
+
