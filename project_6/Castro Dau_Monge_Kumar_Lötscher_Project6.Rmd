@@ -13,6 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
+
+
+
+
+
+
+
 ## Problem 16: Sampling in the Rain Network
 ### a) Derive the expressions for P (C = T | R = T, S = T, W = T), P (C = T | R = F, S =T, W = T), P (R = T | C = T, S = T, W = T) and P (R = T | C = F, S = T, W = T) and compute their values.
 
@@ -36,12 +43,12 @@ P(R=T|C=F,S=T,W=T)&=\frac{P(R=T|C=F)P(W=T|R=T,S=T)}{P(R=T|C=F)P(W=T|R=T,S=T)+P(R
 \end{split}
 \end{equation*}
 
-
 ### b) Implement the Gibbs sampler for the Bayesian network 
 
 
 ```{r, echo = FALSE}
 library("coda")
+library("ggplot2")
 
 ```
 
@@ -94,10 +101,10 @@ res
 #1=True, 0=False
 #Row is Cloudy, Column is Rain
 
-table(data.frame(C=C,R=R))/niter
+table=table(res))/niter
+table
 
 ```
-
 
 ### c) Estimate the marginal probability of rain, given that the sprinkler is on and the grass is wet
 
@@ -121,12 +128,14 @@ for(i in 2:niter){
   C[i] = sample_CgivenR(R[i-1])
   R[i] = sample_RgivenC(C[i])
 }
-res50000 = data.frame(C=C,R=R)
-head(res50000)
+res50000run1 = data.frame(C=C,R=R)
+head(res50000run1)
 
 #Print the table
-table50000=table(res50000)/niter
-table50000
+table50000run1=table(res50000run1)/niter
+table50000run1
+colSums(table50000run1)
+
 
 ```
 
@@ -138,9 +147,9 @@ table50000
 #First Run of Gibbs sampler
 freqC<-c()
 freqR<-c()
-for(i in 1:nrow(res50000)){
-  freqC<-append(freqC,sum(res50000$C[1:i])/i)
-  freqR<-append(freqR,sum(res50000$R[1:i])/i)
+for(i in 1:niter){
+  freqC<-append(freqC,sum(res50000run1$C[1:i])/i)
+  freqR<-append(freqR,sum(res50000run1$R[1:i])/i)
 }
 
 #Second Run of Gibbs sampler
@@ -153,20 +162,20 @@ for(i in 2:niter){
   C[i] = sample_CgivenR(R[i-1])
   R[i] = sample_RgivenC(C[i])
 }
-res50000 = data.frame(C=C,R=R)
+res50000run2 = data.frame(C=C,R=R)
 
 
 freqC2<-c()
 freqR2<-c()
-for(i in 1:nrow(res50000)){
-  freqC2<-append(freqC2,sum(res50000$C[1:i])/i)
-  freqR2<-append(freqR2,sum(res50000$R[1:i])/i)
+for(i in 1:niter){
+  freqC2<-append(freqC2,sum(res50000run2$C[1:i])/i)
+  freqR2<-append(freqR2,sum(res50000run2$R[1:i])/i)
 }
 
 
 
-df <- data.frame(1:nrow(res50000),freqC,freqR,freqC2,freqR2)
-ggplot(df, aes(1:nrow(res50000))) +           
+df <- data.frame((1:niter),freqC,freqR,freqC2,freqR2)
+ggplot(df, aes(1:niter)) +           
   geom_line(aes(y=freqC, colour="C Fequency Run 1")) +  
   geom_line(aes(y=freqR, colour="R Fequency Run 1")) +
   geom_line(aes(y=freqC2, colour="C Fequency Run 2")) +
@@ -181,17 +190,48 @@ Suggested burn-in time based on this plot is about ~5000 iterations.
 
 ```{r}
 
+mcmc1<-mcmc(data=res50000run1 , start = 1, end = niter)
+mcmc2<-mcmc(data=res50000run2 , start = 1, end = niter)
+
+combinedchains = mcmc.list(mcmc1, mcmc2)
+
+gelman.diag(combinedchains)
+gelman.plot(combinedchains)
+
 ```
+
+Suggested burn-in time based on this plot is about ~5000 iterations or also ~20000 iterations for R.
+
+
 
 ### g) Provide plots for both variables Rain and Cloudy and suggest an interval for drawing approximately independent samples. 
 
 ```{r}
 
+
+acf(res50000run1$C,type="correlation")
+
+
+acf(res50000run1$R,type="correlation")
+
+
 ```
+
+The safe interval for taking independent samples is from 4 on.
+
 
 ### h)Re-estimate P (R = T | S = T, W = T) based on samples obtained after the suggested burn-in time and thinning.
 
 ```{r}
+
+dd<-res50000run1[5000:50000,]
+
+
+
+
+
+tabledd=table(dd)/niter
+colSums(tabledd)
 
 ```
 
