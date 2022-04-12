@@ -48,3 +48,80 @@ $$
 $$
 
 ## Problem 16: Sampling in the Rain Network
+### Derive the expressions for $P(C = T | R = T,S = T,W = T)$, $P(C = T | R = F,S = T, W = T)$, $P (R = T | C = T, S = T, W = T)$ and $P(R = T | C = F, S = T, W = T)$ and compute their values.
+
+#### a.i) 
+$$
+P(C = T | R = T,S = T,W = T) = P(C=T|R=T,S=T)
+$$
+
+$$
+=\frac
+{P(C=T)P(S=T,R=T|C=T)}
+{P(S=T,R=T)}   
+$$
+
+$$
+=\frac
+{P(C=T)P(S=T|C=T)P(R=T|C=T)}
+{P(C=T)P(S=T|C=T)P(R=T|C=T)+P(C=F)P(S=T|C=F)P(R=T|C=F)}
+$$
+
+$$
+=\frac{0.5*0.1*0.8}{0.53*0.1*0.8+0.5*0.5*0.2}=0.4444
+$$
+
+#### a.ii) 
+$$
+P(C = T|R = F,S = T,W = T) = 
+$$
+
+$$
+=\frac
+{P(C=T)P(S=T|C=T)P(R=F|C=T)}
+{P(C=T)P(S=T|C=T)P(R=F|C=T)+P(C=F)P(S=T|C=F)P(R=F|C=F)}
+$$
+$$
+=\frac{0.5*0.1*0.2}{0.5*0.1*0.2+0.5*0.5*0.8}=0.04761905
+$$
+
+#### a.iii) 
+$$
+P (R = T | C = T, S = T, W = T) = 
+$$
+
+$$
+\frac
+{P(R=T|C=T,S=T)P(W=T|R=T,C=T,S=T)}
+{P(W=T|C=T,S=T)} =
+$$
+
+$$
+\frac
+{P(R=T|C=T)P(W=T|R=T,S=T)}
+{P(W=T|C=T,S=T)} =
+$$
+
+$$
+\frac{P(R=T|C=T)P(W=T|R=T,S=T)}
+{P(R=T|C=T)P(W=T|R=T,S=T)+P(R=F|C=T)P(W=T|R=F,S=T)}
+$$
+$$
+= \frac
+{0.8*0.99}
+{0.8*0.99+0.2*0.9}=0.8148
+$$
+
+#### a.iv) 
+$$
+P(R=T|C=F,S=T,W=T) =
+$$
+
+$$
+\frac
+{P(R=T|C=F)P(W=T|R=T,S=T)}
+{P(R=T|C=F)P(W=T|R=T,S=T)+P(R=F|C=F)P(W=T|R=F,S=T)}
+$$
+$$
+= \frac{0.2*0.99}{0.2*0.99+0.8*0.9}=0.2156863
+$$
