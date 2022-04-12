@@ -36,16 +36,19 @@ Specifically for our proof we have that:
 $$
 Var(\hat{g}(X)) = Var(\frac{\sum _{i=1}^{N}g(X_{i})}{N}) 
 $$
+
 Using one of the properties of the variance we can pull out the constant $N$ and obtain the following:
 
 $$
 Var(\frac{\sum _{i=1}^{N}g(X_{i})}{N}) = \frac{1}{N^2} Var(\sum _{i=1}^{N}g(X_{i})) 
 $$
+
 Then using Bienaymé's identity we have that:
 
 $$
 \frac{1}{N^2} Var(\sum _{i=1}^{N}g(X_{i})) = \frac{1}{N^2} \sum _{i=1}^{N} Var(g(X_{i}))
 $$
+
 Finally since all the $X_i$'s are i.i.d with variance equal to $Var(g(X))$ we arrive at the expression we had seek to proof.
 
 $$
