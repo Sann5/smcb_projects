@@ -5,49 +5,46 @@ output: pdf_document
 ---
 
 ## Problem 15: Monte Carlo estimation of an expected value
-We start by showing that $Var(\hat{g}(X)) = \frac{Var(g(X))}{N}$. Bienaymé's identity states that:
+### Proof 1: $\mathbb{E}[\hat{g}(X)] = \mathbb{E}[g(X)]$
+Using the properties of the expectation and the fact that $\mathbb{E}[g(X_i)] = \mathbb{E}[g(X)]$:
 
 $$
-{Var} \left(\sum _{i=1}^{n}X_{i}\right)=\sum _{i=1}^{n}\operatorname {Var} (X_{i})+\sum _{i,j=1 \atop i\neq j}^{n}\operatorname {Cov} (X_{i},X_{j})=\sum _{i,j=1}^{n}\operatorname {Cov} (X_{i},X_{j})
+\mathbb{E}[\hat{g}(X)] = \mathbb{E}[\frac{1}{N}\sum _{i=1}^{N}g(X_{i})] = \frac{1}{N} \mathbb{E}[\sum _{i=1}^{N}g(X_{i})] = \frac{1}{N} \sum _{i=1}^{N} \mathbb{E}[g(X_{i})] \\
+= \frac{N}{N} \mathbb{E}[g(X)] = \mathbb{E}[g(X)]
 $$
-Where $X_1, \ldots, X_n$ are pairwise independent integrable random variables with finite second moments. Since the covariance between any pair of independent random variables is zero we get the following.
+
+### Proof 2: $Var(\hat{g}(X)) = \frac{Var(g(X))}{N}$
+Bienaymé's identity states that:
 
 $$
-{Var} \left(\sum _{i=1}^{n}X_{i}\right)=\sum _{i=1}^{n}\operatorname {Var} (X_{i})
+{Var} \left(\sum _{i=1}^{N}X_{i}\right)=\sum _{i=1}^{N}\operatorname {Var} (X_{i})+\sum _{i,j=1 \atop i\neq j}^{N}\operatorname {Cov} (X_{i},X_{j})=\sum _{i,j=1}^{N}\operatorname {Cov} (X_{i},X_{j})
+$$
+
+Since the covariance between any pair of independent random variables is zero we get the following.
+
+$$
+{Var} \left(\sum _{i=1}^{N}X_{i}\right)=\sum _{i=1}^{N}\operatorname {Var} (X_{i})
 $$
 
 Specifically for our proof we have that:
 
 $$
-Var(\hat{g}(X)) = Var(\frac{\sum _{i=1}^{n}g(X_{i})}{N}) 
+Var(\hat{g}(X)) = Var(\frac{\sum _{i=1}^{N}g(X_{i})}{N}) 
 $$
 Using one of the properties of the variance we can pull out the constant $N$ and obtain the following:
 
 $$
-Var(\frac{\sum _{i=1}^{n}g(X_{i})}{N}) = \frac{1}{N^2} Var(\sum _{i=1}^{n}g(X_{i})) 
+Var(\frac{\sum _{i=1}^{N}g(X_{i})}{N}) = \frac{1}{N^2} Var(\sum _{i=1}^{N}g(X_{i})) 
 $$
 Then using Bienaymé's identity we have that:
 
 $$
-\frac{1}{N^2} Var(\sum _{i=1}^{n}g(X_{i})) = \frac{1}{N^2} \sum _{i=1}^{n} Var(g(X_{i}))
+\frac{1}{N^2} Var(\sum _{i=1}^{N}g(X_{i})) = \frac{1}{N^2} \sum _{i=1}^{N} Var(g(X_{i}))
 $$
-
 Finally since all the $X_i$'s are i.i.d with variance equal to $Var(g(X))$ we arrive at the expression we had seek to proof.
 
 $$
-\frac{1}{N^2} \sum _{i=1}^{n} Var(g(X_{i})) = \frac{N}{N^2} Var(g(X)) = \frac{Var(g(X))}{N}
+\frac{1}{N^2} \sum _{i=1}^{N} Var(g(X_{i})) = \frac{N}{N^2} Var(g(X)) = \frac{Var(g(X))}{N}
 $$
 
-To prove that $\mathbb{E}[\hat{g}(X)] = \mathbb{E}[g(X)]$ we assume (as we did for the last proof) that the RV $g(X_i)$ has finite variance $Var(g(X))$. Then by way of Chebyshev's inequality on $\hat{g}(X)$ we have that:
-
-$$
-\operatorname {P} (\left|{\hat{g}(X)} - \mathbb{E}[g(X)]\right|\geq \varepsilon )\leq {\frac {Var(g(X))}{N\varepsilon ^{2}}}
-$$
-
-Then the probability that this inequality does not hold is 1 minus this quantity, such that:
-
-$$
-{P} (\left|{\hat{g}(X)} - \mathbb{E}[g(X)]\right| < \varepsilon ) = 1- \operatorname {P} (\left|{\hat{g}(X)} - \mathbb{E}[g(X)]\right|\geq \varepsilon ) \geq 1 - {\frac {Var(g(X))}{N\varepsilon ^{2}}}
-$$
-
-Then by taking $N \to \infty$ we can see that the second term goes to 0, which implies that as the sample size increases the $\hat{g}(X)$ converges to $\mathbb{E}[g(X)]$ with probability 1.
+## Problem 16: Sampling in the Rain Network
