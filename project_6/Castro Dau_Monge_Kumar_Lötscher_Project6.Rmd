@@ -85,11 +85,6 @@ res = data.frame(C=C,R=R)
 res
 
 
-res[duplicated(res),]
-sum(duplicated(res))
-
-count=aggregate(seq(nrow(res))~., data=res, FUN=length)
-count
 ```
 
 
@@ -99,10 +94,7 @@ count
 #1=True, 0=False
 #Row is Cloudy, Column is Rain
 
-tableRC<-rbind(c(count[4,3],count[3,3]),c(count[2,3],count[1,3]))
-rownames(tableRC)<- c(1,0)
-colnames(tableRC)<- c(1,0)
-tableRC
+table(data.frame(C=C,R=R))/niter
 
 ```
 
