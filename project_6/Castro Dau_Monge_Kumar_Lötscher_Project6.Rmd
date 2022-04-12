@@ -8,40 +8,128 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 ## Problem 15: Monte Carlo estimation of an expected value
-### 1. Show that: $...$
+### Proof 1: $\mathbb{E}[\hat{g}(X)] = \mathbb{E}[g(X)]$
+Using the properties of the expectation and the fact that $\mathbb{E}[g(X_i)] = \mathbb{E}[g(X)]$:
 
+$$
+\mathbb{E}[\hat{g}(X)] = \mathbb{E}[\frac{1}{N}\sum _{i=1}^{N}g(X_{i})] = \frac{1}{N} \mathbb{E}[\sum _{i=1}^{N}g(X_{i})] = \frac{1}{N} \sum _{i=1}^{N} \mathbb{E}[g(X_{i})] \\
+= \frac{N}{N} \mathbb{E}[g(X)] = \mathbb{E}[g(X)]
+$$
 
+### Proof 2: $Var(\hat{g}(X)) = \frac{Var(g(X))}{N}$
+Bienaymé's identity states that:
 
+$$
+{Var} \left(\sum _{i=1}^{N}X_{i}\right)=\sum _{i=1}^{N}\operatorname {Var} (X_{i})+\sum _{i,j=1 \atop i\neq j}^{N}\operatorname {Cov} (X_{i},X_{j})=\sum _{i,j=1}^{N}\operatorname {Cov} (X_{i},X_{j})
+$$
 
+Since the covariance between any pair of independent random variables is zero we get the following.
 
+$$
+{Var} \left(\sum _{i=1}^{N}X_{i}\right)=\sum _{i=1}^{N}\operatorname {Var} (X_{i})
+$$
 
+Specifically for our proof we have that:
 
+$$
+Var(\hat{g}(X)) = Var(\frac{\sum _{i=1}^{N}g(X_{i})}{N}) 
+$$
+Using one of the properties of the variance we can pull out the constant $N$ and obtain the following:
 
+$$
+Var(\frac{\sum _{i=1}^{N}g(X_{i})}{N}) = \frac{1}{N^2} Var(\sum _{i=1}^{N}g(X_{i})) 
+$$
+Then using Bienaymé's identity we have that:
 
+$$
+\frac{1}{N^2} Var(\sum _{i=1}^{N}g(X_{i})) = \frac{1}{N^2} \sum _{i=1}^{N} Var(g(X_{i}))
+$$
+Finally since all the $X_i$'s are i.i.d with variance equal to $Var(g(X))$ we arrive at the expression we had seek to proof.
+
+$$
+\frac{1}{N^2} \sum _{i=1}^{N} Var(g(X_{i})) = \frac{N}{N^2} Var(g(X)) = \frac{Var(g(X))}{N}
+$$
 
 ## Problem 16: Sampling in the Rain Network
-### a) Derive the expressions for P (C = T | R = T, S = T, W = T), P (C = T | R = F, S =T, W = T), P (R = T | C = T, S = T, W = T) and P (R = T | C = F, S = T, W = T) and compute their values.
+### a) Derive the expressions for $P(C = T | R = T,S = T,W = T)$, $P(C = T | R = F,S = T, W = T)$, $P (R = T | C = T, S = T, W = T)$ and $P(R = T | C = F, S = T, W = T)$ and compute their values.
 
-\begin{equation*}
-\begin{split}
-  P(C=T|R=T,S=T,W=T)&=P(C=T|R=T,S=T)&=\frac{P(C=T)P(S=T,R=T|C=T)}{P(S=T,R=T)}\\     &=\frac{P(C=T)P(S=T|C=T)P(R=T|C=T)}{P(C=T)P(S=T|C=T)P(R=T|C=T)+P(C=F)P(S=T|C=F)P(R=T|C=F)}\\
-&=\frac{0.5*0.1*0.8}{0.53*0.1*0.8+0.5*0.5*0.2}&=0.4444
+#### a.i) 
+$$
+P(C = T | R = T,S = T,W = T) = P(C=T|R=T,S=T)
+$$
 
-P(C=T|R=F,S=T,W=T)&=\frac{P(C=T)P(S=T|C=T)P(R=F|C=T)}{P(C=T)P(S=T|C=T)P(R=F|C=T)+P(C=F)P(S=T|C=F)P(R=F|C=F)}\\
-&=\frac{0.5*0.1*0.2}{0.5*0.1*0.2+0.5*0.5*0.8}&=0.04761905
+$$
+=\frac
+{P(C=T)P(S=T,R=T|C=T)}
+{P(S=T,R=T)}   
+$$
 
+$$
+=\frac
+{P(C=T)P(S=T|C=T)P(R=T|C=T)}
+{P(C=T)P(S=T|C=T)P(R=T|C=T)+P(C=F)P(S=T|C=F)P(R=T|C=F)}
+$$
 
+$$
+=\frac{0.5*0.1*0.8}{0.53*0.1*0.8+0.5*0.5*0.2}=0.4444
+$$
 
-P(R=T|C=T,S=T,W=T)&=\frac{P(R=T|C=T,S=T)P(W=T|R=T,C=T,S=T)}{P(W=T|C=T,S=T)}&=\frac{P(R=T|C=T)P(W=T|R=T,S=T)}{P(W=T|C=T,S=T)}\\  &=\frac{P(R=T|C=T)P(W=T|R=T,S=T)}{P(R=T|C=T)P(W=T|R=T,S=T)+P(R=F|C=T)P(W=T|R=F,S=T)}\\
-&=\frac{0.8*0.99}{0.8*0.99+0.2*0.9}&=0.8148
+#### a.ii) 
+$$
+P(C = T|R = F,S = T,W = T) = 
+$$
 
-P(R=T|C=F,S=T,W=T)&=\frac{P(R=T|C=F)P(W=T|R=T,S=T)}{P(R=T|C=F)P(W=T|R=T,S=T)+P(R=F|C=F)P(W=T|R=F,S=T)}\\
-&=\frac{0.2*0.99}{0.2*0.99+0.8*0.9}&=0.2156863
+$$
+=\frac
+{P(C=T)P(S=T|C=T)P(R=F|C=T)}
+{P(C=T)P(S=T|C=T)P(R=F|C=T)+P(C=F)P(S=T|C=F)P(R=F|C=F)}
+$$
+$$
+=\frac{0.5*0.1*0.2}{0.5*0.1*0.2+0.5*0.5*0.8}=0.04761905
+$$
 
+#### a.iii) 
+$$
+P (R = T | C = T, S = T, W = T) = 
+$$
 
-\end{split}
-\end{equation*}
+$$
+\frac
+{P(R=T|C=T,S=T)P(W=T|R=T,C=T,S=T)}
+{P(W=T|C=T,S=T)} =
+$$
+
+$$
+\frac
+{P(R=T|C=T)P(W=T|R=T,S=T)}
+{P(W=T|C=T,S=T)} =
+$$
+
+$$
+\frac{P(R=T|C=T)P(W=T|R=T,S=T)}
+{P(R=T|C=T)P(W=T|R=T,S=T)+P(R=F|C=T)P(W=T|R=F,S=T)}
+$$
+$$
+= \frac
+{0.8*0.99}
+{0.8*0.99+0.2*0.9}=0.8148
+$$
+
+#### a.iv) 
+$$
+P(R=T|C=F,S=T,W=T) =
+$$
+
+$$
+\frac
+{P(R=T|C=F)P(W=T|R=T,S=T)}
+{P(R=T|C=F)P(W=T|R=T,S=T)+P(R=F|C=F)P(W=T|R=F,S=T)}
+$$
+$$
+= \frac{0.2*0.99}{0.2*0.99+0.8*0.9}=0.2156863
+$$
 
 ### b) Implement the Gibbs sampler for the Bayesian network 
 
