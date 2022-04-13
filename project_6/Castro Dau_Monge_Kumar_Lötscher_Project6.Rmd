@@ -180,9 +180,6 @@ for(i in 2:niter){
   R[i] = sample_RgivenC(C[i])
 }
 res = data.frame(C=C,R=R)
-res
-
-
 ```
 
 
@@ -192,7 +189,7 @@ res
 #1=True, 0=False
 #Row is Cloudy, Column is Rain
 
-table=table(res))/niter
+table=table(res)/niter
 table
 
 ```
@@ -201,7 +198,6 @@ table
 
 You sum over the C's/ marginalised over C.
 ```{r}
-#JUNE ADD EQUATION LOL
 colSums(table)
 
 ```
@@ -326,11 +322,64 @@ colSums(tabledd)
 
 ```
 
-### i)Compute the probability P (R = T | S = T, W = T) analytically. Compare with (c) and (h)
-and comment on your results.
+### i) Compute the probability P (R = T | S = T, W = T) analytically. Compare with (c) and (h)
 
-```{r}
+$$
+P (R = T | S = T, W = T) =
+\frac
+{P (R = T, S = T, W = T)}
+{P(S = T, W = T)}
+$$
 
-```
+$$
+=
+\frac
+{P (W = T | R = T, S = T) P(R = T | S = T) P(S = T)}
+{\sum_{c \in \{F,T\}} P(C = c) P(S = T, W = T | C = c)}
+$$
 
+$$
+=
+\frac
+{P (W = T | R = T, S = T) P(R = T | S = T) P(S = T)}
+{\sum_{c \in \{F,T\}} P(C = c) P(W = T | S = T, C = c) P(S = T | C = c)}
+$$
 
+Here we compute the quantities we dont know inmediatly from the table:
+$$
+P(R = T | S = T) =  \sum_{c \in \{F,T\}} P(C=c) P(R = T | S = T, C = c) 
+$$
+
+$$
+=  \sum_{c \in \{F,T\}} P(C=c) P(R = T |  C = c) =  P(R = T) = 0.5 \times 0.8 + 0.5 \times 0.2 = 0.5
+$$
+
+$$
+P(R = F) = 1 - P(R = T) = 0.5
+$$
+
+$$
+P(S = T) = \sum_{c \in \{F,T\}} P(C=c) P( S = T | C = c) = 0.5 \times 0.1 + 0.5 \times 0.5 = 0.3
+$$
+
+$$
+P(W = T | S = T, C = T) = \sum_{r \in \{F,T\}} P(R=r) P(W = T | S = T, R = r, C = T)
+$$
+
+$$
+= \sum_{r \in \{F,T\}} P(R=r) P(W = T | S = T, R = r) = 0.5 \times 0.99 + 0.5 \times 0.9 = 0.945
+$$
+
+Then putting it all together:
+
+$$
+\frac
+{P (W = T | R = T, S = T) P(R = T | S = T) P(S = T)}
+{\sum_{c \in \{F,T\}} P(C = c) P(W = T | S = T) P(S = T | C = c)}
+$$
+
+$$
+= \frac
+{0.99 \times 0.5 \times 0.3}
+{0.5 \times 0.945 \times 0.1 + 0.5 \times 0.945 \times 0.5} = 0.5238095
+$$
