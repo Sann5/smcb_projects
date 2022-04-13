@@ -140,27 +140,22 @@ $$
 ```{r, echo = FALSE}
 library("coda")
 library("ggplot2")
-
 ```
 
 
 ```{r}
-
 #returns 1 with probability p, and 0 with probability 1-p
 rbernoulli=function(p){return(1*runif(1)<p)}
-
-
-
-# sample from distribution X given Y above
+# sample from distribution C given R above
 sample_CgivenR = function(R){
  if(R==0){
-   C = rbernoulli(0.0476) # returns 1 with probability 0.2; otherwise 0
+   C = rbernoulli(0.0476) # returns 1 with probability 0.0476; otherwise 0
  } else {
    C = rbernoulli(0.4444)
  } 
   return(C)
 }
-#' sample from distribution Y given X above
+#' sample from distribution R given C above
 sample_RgivenC = function(C){
   if(C==0){
     R = rbernoulli(0.2157)
@@ -187,21 +182,26 @@ res = data.frame(C=C,R=R)
 ```{r}
 #Display a 2-by-2 table for the sampled R and C.
 #1=True, 0=False
-#Row is Cloudy, Column is Rain
-
 table=table(res)/niter
 table
-
 ```
 
 ### c) Estimate the marginal probability of rain, given that the sprinkler is on and the grass is wet
 
-You sum over the C's/ marginalised over C.
+The marginal probability of R given the defined conditions can be obtained by marginalizing over C in the following way:
+$$
+P(R|S=T,W=T) = \sum_c P(R,C|S=T,W=T)
+$$
 ```{r}
+# Marginalize over C
 colSums(table)
-
 ```
+Therefore, in other words:
 
+$$
+P(R=T|S=T,W=T) = \sum_c P(R=T,C|S=T,W=T)=0.32\\
+P(R=F|S=T,W=T) = \sum_c P(R=F,C|S=T,W=T)=0.68
+$$
 
 ### d) Draw 50,000 samples instead of 100 using the Gibbs sampler
 
@@ -216,22 +216,22 @@ for(i in 2:niter){
   R[i] = sample_RgivenC(C[i])
 }
 res50000run1 = data.frame(C=C,R=R)
-head(res50000run1)
-
 #Print the table
 table50000run1=table(res50000run1)/niter
 table50000run1
-colSums(table50000run1)
-
-
 ```
+```{r}
+# Marginalize over C
+colSums(table50000run1)
+```
+
 
 ### e) Plot the relative frequencies of R = T and C = T up to each iteration t against t, for two independent runs of the sampler. Suggest a burn-in time based on this plot.
 
 
 ```{r}
-
 #First Run of Gibbs sampler
+# initialise frequency vectors
 freqC<-c()
 freqR<-c()
 for(i in 1:niter){
@@ -251,7 +251,7 @@ for(i in 2:niter){
 }
 res50000run2 = data.frame(C=C,R=R)
 
-
+# initialise frequency vectors
 freqC2<-c()
 freqR2<-c()
 for(i in 1:niter){
@@ -259,68 +259,74 @@ for(i in 1:niter){
   freqR2<-append(freqR2,sum(res50000run2$R[1:i])/i)
 }
 
-
-
+# plot relative frequencies
 df <- data.frame((1:niter),freqC,freqR,freqC2,freqR2)
 ggplot(df, aes(1:niter)) +           
   geom_line(aes(y=freqC, colour="C Fequency Run 1")) +  
   geom_line(aes(y=freqR, colour="R Fequency Run 1")) +
   geom_line(aes(y=freqC2, colour="C Fequency Run 2")) +
   geom_line(aes(y=freqR2, colour="R Fequency Run 2")) + ylab("Relative Frequencies") + xlab("Iterations")+labs(color = "Legend")
-
 ```
-Suggested burn-in time based on this plot is about ~5000 iterations.
+An appropriate burn-in time is that at which the relative frequency reaches its stationary phase. Therefore, around ~5000 iterations would be a suitable choice.
 
 
 
 ### f) Apply the Gelman and Rubin test 
 
 ```{r}
-
+# Generate 2 independent chains of observations
 mcmc1<-mcmc(data=res50000run1 , start = 1, end = niter)
 mcmc2<-mcmc(data=res50000run2 , start = 1, end = niter)
-
 combinedchains = mcmc.list(mcmc1, mcmc2)
 
+# Apply Gelman and Rubin test
 gelman.diag(combinedchains)
 gelman.plot(combinedchains)
-
 ```
 
-Suggested burn-in time based on this plot is about ~5000 iterations or also ~20000 iterations for R.
+Following the same criteria that was stated above, the suggested burn-in time is about ~10000 iterations. Note that small oscillations can be observed up to the ~15000th iteration, and thus a larger burn-in time might also be considered.
 
 
 
 ### g) Provide plots for both variables Rain and Cloudy and suggest an interval for drawing approximately independent samples. 
 
 ```{r}
-
-
 acf(res50000run1$C,type="correlation")
-
-
 acf(res50000run1$R,type="correlation")
-
-
 ```
+The correlation between two random variables $X_1$ and $X_2$ is defined as:
 
-The safe interval for taking independent samples is from 4 on.
+$$
+\rho(X_1,X_2)=\frac{Cov(X_1,X_2)}{\sqrt {Var(X_1)Var(X_2)}}=\frac{1}{\sqrt {Var(X_1)Var(X_2)}}\left(E[X_1,X_2] - E[X_1]E[X_2]\right)
+$$
+If $X_1$ and $X_2$ are independent, then $E[X_1,X_2]=E[X_1]E[X_2]$, thus
+
+$$
+\rho(X_1,X_2)=\frac{1}{\sqrt {Var(X_1)Var(X_2)}}\left(E[X_1]E[X_2] - E[X_1]E[X_2]\right)=0
+$$
+Overall, the safe interval for taking independent samples that for which the drawn samples have a correlation of $\rho(X_1,X_2)=0$. Therefore, given the plot above, independent samples should be drawn from the lag interval $[5,)$.
 
 
 ### h)Re-estimate P (R = T | S = T, W = T) based on samples obtained after the suggested burn-in time and thinning.
 
 ```{r}
-
+# Only consider samples from burn-in time on
 dd<-res50000run1[5000:50000,]
 
+# Apply thinning by taking every 5th sample
+dd_thin <- dd[c(TRUE,rep(FALSE,4)), ]
 
+# Compute Joint Probability table
+tabledd=table(dd_thin)/dim(dd_thin)[1]
 
-
-
-tabledd=table(dd)/niter
+# Re-estimate P (R = T | S = T, W = T)
 colSums(tabledd)
-
 ```
+The marginal probability of R given the defined conditions is therefore
+$$
+P(R=T|S=T,W=T) = \sum_c P(R=T,C|S=T,W=T)=0.33\\
+P(R=F|S=T,W=T) = \sum_c P(R=F,C|S=T,W=T)=0.67
+$$
 
 ### i) Compute the probability P (R = T | S = T, W = T) analytically. Compare with (c) and (h)
 
@@ -383,3 +389,5 @@ $$
 {0.99 \times 0.5 \times 0.3}
 {0.5 \times 0.945 \times 0.1 + 0.5 \times 0.945 \times 0.5} = 0.5238095
 $$
+
+Compared with (c) and (h) the analytically computed probability seems quite different.
