@@ -164,7 +164,7 @@ sample_RgivenC = function(C){
   }
   return(R)
 }
-set.seed(100)
+set.seed(101)
 niter = 100
 C = rep(0,niter)
 R = rep(0,niter)
@@ -199,8 +199,8 @@ colSums(table)
 Therefore, in other words:
 
 $$
-P(R=T|S=T,W=T) = \sum_c P(R=T,C|S=T,W=T)=0.32\\
-P(R=F|S=T,W=T) = \sum_c P(R=F,C|S=T,W=T)=0.68
+P(R=T|S=T,W=T) = \sum_c P(R=T,C|S=T,W=T)=0.27\\
+P(R=F|S=T,W=T) = \sum_c P(R=F,C|S=T,W=T)=0.73
 $$
 
 ### d) Draw 50,000 samples instead of 100 using the Gibbs sampler
@@ -311,10 +311,10 @@ Overall, the safe interval for taking independent samples that for which the dra
 
 ```{r}
 # Only consider samples from burn-in time on
-dd<-res50000run1[5000:50000,]
+dd<-res50000run1[10000:50000,]
 
-# Apply thinning by taking every 5th sample
-dd_thin <- dd[c(TRUE,rep(FALSE,4)), ]
+# Apply thinning by taking every 4th sample
+dd_thin <- dd[c(TRUE,rep(FALSE,3)), ]
 
 # Compute Joint Probability table
 tabledd=table(dd_thin)/dim(dd_thin)[1]
@@ -324,9 +324,10 @@ colSums(tabledd)
 ```
 The marginal probability of R given the defined conditions is therefore
 $$
-P(R=T|S=T,W=T) = \sum_c P(R=T,C|S=T,W=T)=0.33\\
-P(R=F|S=T,W=T) = \sum_c P(R=F,C|S=T,W=T)=0.67
+P(R=T|S=T,W=T) = \sum_c P(R=T,C|S=T,W=T)=0.32\\
+P(R=F|S=T,W=T) = \sum_c P(R=F,C|S=T,W=T)=0.68
 $$
+
 
 ### i) Compute the probability P (R = T | S = T, W = T) analytically. Compare with (c) and (h)
 
@@ -335,59 +336,35 @@ P (R = T | S = T, W = T) =
 \frac
 {P (R = T, S = T, W = T)}
 {P(S = T, W = T)}
+=\frac
+{\sum_{c \in \{F,T\}}P (R = T,C=c, S = T, W = T)}
+{\sum_{c \in \{F,T\}}\sum_{r \in \{F,T\}}P (R = r,C=c, S = T, W = T)}
 $$
 
 $$
-=
+P (R = T, S = T, W = T)= \sum_{c \in \{F,T\}}P (R = T,C=c, S = T, W = T)=\sum_{c \in \{F,T\}}P(C=c)P(R=T|C=c)P(S=T|C=c)P(W=T|R=T,C=c)\\
+P(C=T)P(R=T|C=T)P(S=T|C=T)P(W=T|R=T,C=T)=0.5\times0.8\times0.1\times0.99=0.0396\\
+P(C=F)P(R=T|C=F)P(S=T|C=F)P(W=T|R=T,C=F)=0.5\times0.2\times0.5\times0.99=0.0495\\
+P (R = T, S = T, W = T)=0.0396+0.0495=0.0891
+$$
+
+$$
+P(S = T, W = T)={\sum_{c \in \{F,T\}}\sum_{r \in \{F,T\}}P (R = r,C=c, S = T, W = T)}=\sum_{c \in \{F,T\}}P (R = T,C=c, S = T, W = T)+\sum_{c \in \{F,T\}}P (R = F,C=c, S = T, W = T)\\
+\sum_{c \in \{F,T\}}P (R = F,C=c, S = T, W = T)=\sum_{c \in \{F,T\}}P(C=c)P(R=F|C=c)P(S=T|C=c)P(W=T|R=F,C=c)\\
+P(C=T)P(R=F|C=T)P(S=T|C=T)P(W=T|R=F,C=T)=0.5\times0.2\times0.9\times0.1=0.009\\
+P(C=F)P(R=F|C=F)P(S=T|C=F)P(W=T|R=F,C=F)=0.5\times0.8\times0.9\times0.5=0.18\\
+P(S = T, W = T)=0.0891+0.009+0.18=0.2781
+$$
+
+
+$$
+P (R = T | S = T, W = T) =
 \frac
-{P (W = T | R = T, S = T) P(R = T | S = T) P(S = T)}
-{\sum_{c \in \{F,T\}} P(C = c) P(S = T, W = T | C = c)}
-$$
-
-$$
-=
+{P (R = T, S = T, W = T)}
+{P(S = T, W = T)}=
 \frac
-{P (W = T | R = T, S = T) P(R = T | S = T) P(S = T)}
-{\sum_{c \in \{F,T\}} P(C = c) P(W = T | S = T, C = c) P(S = T | C = c)}
+{0.0891}
+{0.2781}=0.3203883
 $$
-
-Here we compute the quantities we dont know inmediatly from the table:
-$$
-P(R = T | S = T) =  \sum_{c \in \{F,T\}} P(C=c) P(R = T | S = T, C = c) 
-$$
-
-$$
-=  \sum_{c \in \{F,T\}} P(C=c) P(R = T |  C = c) =  P(R = T) = 0.5 \times 0.8 + 0.5 \times 0.2 = 0.5
-$$
-
-$$
-P(R = F) = 1 - P(R = T) = 0.5
-$$
-
-$$
-P(S = T) = \sum_{c \in \{F,T\}} P(C=c) P( S = T | C = c) = 0.5 \times 0.1 + 0.5 \times 0.5 = 0.3
-$$
-
-$$
-P(W = T | S = T, C = T) = \sum_{r \in \{F,T\}} P(R=r) P(W = T | S = T, R = r, C = T)
-$$
-
-$$
-= \sum_{r \in \{F,T\}} P(R=r) P(W = T | S = T, R = r) = 0.5 \times 0.99 + 0.5 \times 0.9 = 0.945
-$$
-
-Then putting it all together:
-
-$$
-\frac
-{P (W = T | R = T, S = T) P(R = T | S = T) P(S = T)}
-{\sum_{c \in \{F,T\}} P(C = c) P(W = T | S = T) P(S = T | C = c)}
-$$
-
-$$
-= \frac
-{0.99 \times 0.5 \times 0.3}
-{0.5 \times 0.945 \times 0.1 + 0.5 \times 0.945 \times 0.5} = 0.5238095
-$$
-
-Compared with (c) and (h) the analytically computed probability seems quite different.
+Compared with (c) and (h) the analytically computed probability seems to be very close to the one obtained from the Gibbs sampler.
+There is a larger difference with the values obtained in c) which is reasonable since we only sampled 100x and did neither consider the Burn in time nor the thinning.
