@@ -1,0 +1,109 @@
+---
+title: "Project 7"
+author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
+date: '2022-04-28'
+output: 
+  pdf_document:
+    extra_dependencies:
+      amsmath
+      
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 18: Benefit of storing messages
+### (a)
+The formula for recursively computing the forward and backward messages is:
+\begin{align*}
+\mu_{\alpha}(x_{n}) &= \sum_{x_{n-1}}\psi_{n-1, n}(x_{n-1}, x_{n})\mu_{\alpha}(x_{n-1})\\
+\mu_{\beta}(x_{n}) &= \sum_{x_{n+1}}\psi_{n, n+1}(x_{n}, x_{n+1})\mu_{\beta}(x_{n+1})\\
+\end{align*}
+Initialization:
+\begin{align*}
+\mu_{\alpha}(x_{2}) &= \sum_{x_{1}}\psi_{1, 2}(x_{1}, x_{2})\\
+\mu_{\beta}(x_{4}) &= \sum_{x_{5}}\psi_{4, 5}(x_{4}, x_{5})\\
+%Z &= \sum_{x_{n}}\mu_{\alpha}(x_{n})\mu_{\beta}(x_{n})
+\end{align*}
+
+### (b)
+
+The computational complexity for computing the marginal probability 
+$P(X_{4} = 1)$ is $O(NK^{2})$. For each node that can assume K values, since $(n - 1)K^{2}$ computations have to be done for the forward message passing and $(N - n)K^{2}$ computations have to be done for the backward message passing, this sums to $(N-1)K^{2}$ computations which is of the order $O(NK^{2})$
+
+### (c)
+
+If the messages are stored, by doing one pass in the forward and one pass in the backward, the total number of steps is reduced to $2(N - 1)K^{2}$, and therefore the order is $O(NK^{2})$. In the general case, the number of steps for $N$ nodes is $N(N-1)K^{2}$ and therefore the order of computational complexity is $O(N^{2} K^{2})$
+
+## Problem 19 (data analysis): Message passing on a chain
+### (a) Store clique potentials in an R object
+```{r}
+clique_potentials = array(dim = c(2, 2, 4), dimnames = list(c("0", "1"), c("0", "1"),
+c("Psi12", "Psi23", "Psi34", "Psi45")))
+```
+### compute clique potentials
+```{r}
+X1 = c(1/3,2/3)
+X2 = c(4/5,2/3)
+X3 = c(5/7,1/3)
+X4 = c(3/5,2/5)
+X5 = c(1/2,7/9)
+```
+
+```{r}
+clique_potentials = array(dim = c(2, 2, 4), 
+                          dimnames = list(c("0", "1"), c("0", "1"),
+                                          c("Psi12", "Psi23", "Psi34", "Psi45")))
+clique_potentials[,,"Psi12"] = c(1-X2,X2)*c(1-X1,X1)
+clique_potentials[,,"Psi23"] = c(1-X3,X3)
+clique_potentials[,,"Psi34"] = c(1-X4,X4)
+clique_potentials[,,"Psi45"] = c(1-X5,X5)
+```
+
+```{r}
+clique_potentials[,,"Psi12"]
+```
+```{r}
+clique_potentials[,,"Psi23"]
+```
+```{r}
+clique_potentials[,,"Psi34"]
+```
+```{r}
+clique_potentials[,,"Psi45"]
+```
+### (b) Computing forward messages
+```{r}
+forward_messages = array(dim = c(5,2), dimnames = list(c("X1","X2", "X3","X4","X5"),c("0", "1")))
+forward_messages["X1",] = c(1,1)
+for(i in 2:5){
+  forward_messages[i,]=forward_messages[i-1,]%*%clique_potentials[,,i-1]
+}
+forward_messages
+```
+
+### (d) Computing backward messages
+```{r}
+backward_messages = array(dim = c(2,5), 
+                          dimnames = list(c("0", "1"),
+                                          c("X1","X2","X3","X4","X5")))
+backward_messages[,"X5"] = c(1,1)
+for(i in 4:1){
+  backward_messages[,i]=clique_potentials[,,i]%*%backward_messages[,i+1]
+}
+backward_messages
+```
+### (e) Compute the marginal probability distribution for each node
+```{r}
+unnormalised = array(0,dim = c(5,2),
+                     dimnames=list(c("p(X1)","p(X2)","p(X3)",
+                                     "p(X4)","p(X5)"),
+                                   c("0","1")))
+for(i in 1:5){
+    unnormalised[i,] = forward_messages[i,]*backward_messages[,i]
+}
+Z = rowSums(unnormalised)
+marginal_probability = unnormalised/Z
+marginal_probability
+```
+
