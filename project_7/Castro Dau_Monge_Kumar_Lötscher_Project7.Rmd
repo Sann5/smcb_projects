@@ -10,7 +10,61 @@ output:
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(BiDAG)
+library(graph)
 ```
+
+## Problem 17: Junction Tree Algorithm
+### (a) Build the Junction Tree of the network.
+#### Moralize graph and trinagulate
+```{r}
+adj_mat = matrix(1, 
+                 ncol = 11, 
+                 nrow = 11, 
+                 dimnames = list(LETTERS[seq( from = 1, to = 11 )], 
+                                 LETTERS[seq( from = 1, to = 11 )]))
+adj_mat[lower.tri(adj_mat, diag = TRUE)] = 0
+
+## Changing A
+adj_mat[1, ] = c(0,1,1,0,0,0,0,0,0,0,0)
+## Changing B
+adj_mat[2, ] = c(1,0,1,0,0,0,0,0,0,0,0)
+## Changing C
+adj_mat[3, ] = c(1,1,0,1,0,1,0,0,0,0,0)
+## Changing D
+adj_mat[4, ] = c(0,0,1,0,1,1,0,0,0,0,0)
+## Changing E
+adj_mat[5, ] = c(0,0,0,1,0,1,1,0,0,0,0)
+## Changing F
+adj_mat[6, ] = c(0,0,1,1,1,0,1,0,1,0,0)
+## Changing G
+adj_mat[7, ] = c(0,0,0,0,1,1,0,1,0,0,0)
+## Changing H
+adj_mat[8, ] = c(0,0,0,0,0,0,1,0,0,0,0)
+## Changing I
+adj_mat[9, ] = c(0,0,0,0,0,1,0,0,0,1,1)
+## Changing J
+adj_mat[10, ] = c(0,0,0,0,0,0,0,0,1,0,0)
+## Changing K
+adj_mat[11, ] = c(0,0,0,0,0,0,0,0,1,0,0)
+
+g = graphAM(adjMat = adj_mat, edgemode = 'undirected')
+plot(g)
+```
+
+
+#### Build clique grpah
+
+#### Brake cycles
+
+### (b) Write the joint probability P(U) in terms of the cluster and separator potentials.
+$$
+P(A,B,C,D,E,F,G,H,I,J) = \sum_{A,B,C,D,E,F,G,H,I,J} P(U)
+$$
+
+$$
+= \sum_{A,B,C,D,E,F,G,H,I,J} \phi(U) =  \frac{\phi(ABC)\phi(DCF)\phi(DEF)\phi(EFG)\phi(GH)\phi(FI)\phi(IS)\phi(IK)}{\phi(C)\phi(DF)\phi(EF)\phi(G)\phi(F)\phi(I)^2}
+$$
 
 ## Problem 18: Benefit of storing messages
 ### (a)
@@ -54,7 +108,10 @@ X5 = c(1/2,7/9)
 clique_potentials = array(dim = c(2, 2, 4), 
                           dimnames = list(c("0", "1"), c("0", "1"),
                                           c("Psi12", "Psi23", "Psi34", "Psi45")))
-clique_potentials[,,"Psi12"] = c(1-X2,X2)*c(1-X1,X1)
+clique_potentials[1,1,"Psi12"] = (2/3)*(1/5)
+clique_potentials[1,2,"Psi12"] = (2/3)*(4/5)
+clique_potentials[2,1,"Psi12"] = (1/3)*(1/3)
+clique_potentials[2,2,"Psi12"] = (1/3)*(2/3)
 clique_potentials[,,"Psi23"] = c(1-X3,X3)
 clique_potentials[,,"Psi34"] = c(1-X4,X4)
 clique_potentials[,,"Psi45"] = c(1-X5,X5)

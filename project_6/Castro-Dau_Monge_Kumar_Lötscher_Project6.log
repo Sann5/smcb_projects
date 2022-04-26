@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.10.18)  13 APR 2022 15:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.10.18)  14 APR 2022 12:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -515,97 +515,121 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 271.
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-284.
+281.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [3] [4]
-<Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chunk-6-
-1.pdf, id=66, 457.71pt x 313.17pt>
-File: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
-nk-6-1.pdf Graphic file (type pdf)
-<use Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chun
-k-6-1.pdf>
-Package pdftex.def Info: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figur
-e-latex/unnamed-chunk-6-1.pdf  used on input line 446.
-(pdftex.def)             Requested size: 457.72285pt x 313.17877pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 446--449
-[][]
- []
-
-
-Underfull \vbox (badness 6364) detected at line 463
- []
-
-[5 <./Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
-nk-6-1.pdf>]
 <Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chunk-7-
-1.pdf, id=80, 440.64626pt x 286.06876pt>
+1.pdf, id=66, 457.71pt x 313.17pt>
 File: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
 nk-7-1.pdf Graphic file (type pdf)
 <use Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chun
 k-7-1.pdf>
 Package pdftex.def Info: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figur
-e-latex/unnamed-chunk-7-1.pdf  used on input line 483.
-(pdftex.def)             Requested size: 440.65189pt x 286.07242pt.
+e-latex/unnamed-chunk-7-1.pdf  used on input line 440.
+(pdftex.def)             Requested size: 457.72285pt x 313.17877pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 440--444
+[][]
+ []
+
+[5 <./Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
+nk-7-1.pdf>]
 <Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chunk-8-
-1.pdf, id=81, 436.63126pt x 290.08376pt>
+1.pdf, id=80, 440.64626pt x 286.06876pt>
 File: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
 nk-8-1.pdf Graphic file (type pdf)
 <use Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chun
 k-8-1.pdf>
 Package pdftex.def Info: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figur
-e-latex/unnamed-chunk-8-1.pdf  used on input line 499.
+e-latex/unnamed-chunk-8-1.pdf  used on input line 479.
+(pdftex.def)             Requested size: 440.65189pt x 286.07242pt.
+<Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chunk-9-
+1.pdf, id=81, 436.63126pt x 290.08376pt>
+File: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
+nk-9-1.pdf Graphic file (type pdf)
+<use Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chun
+k-9-1.pdf>
+Package pdftex.def Info: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figur
+e-latex/unnamed-chunk-9-1.pdf  used on input line 497.
 (pdftex.def)             Requested size: 436.63019pt x 290.08304pt.
 [6 <./Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
-nk-7-1.pdf>]
-<Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chunk-8-
+nk-8-1.pdf>]
+<Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chunk-9-
 2.pdf, id=96, 436.63126pt x 290.08376pt>
 File: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
-nk-8-2.pdf Graphic file (type pdf)
+nk-9-2.pdf Graphic file (type pdf)
 <use Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chun
-k-8-2.pdf>
+k-9-2.pdf>
 Package pdftex.def Info: Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figur
-e-latex/unnamed-chunk-8-2.pdf  used on input line 507.
+e-latex/unnamed-chunk-9-2.pdf  used on input line 505.
 (pdftex.def)             Requested size: 436.63019pt x 290.08304pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 505--508
+[][] \T1/lmr/m/n/10 (+20) The
+ []
+
 [7 <./Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/unnamed-chu
-nk-8-1.pdf> <./Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/un
-named-chunk-8-2.pdf>] [8] (./Castro-Dau_Monge_Kumar_Lötscher_Project6.aux) ) 
+nk-9-1.pdf> <./Castro-Dau_Monge_Kumar_Lötscher_Project6_files/figure-latex/un
+named-chunk-9-2.pdf>]
+Overfull \hbox (5.98561pt too wide) detected at line 569
+\OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 R \OT1/lmr/m/n/10 = \OML/lm
+m/m/it/10 T\OMS/lmsy/m/n/10 j\OML/lmm/m/it/10 S \OT1/lmr/m/n/10 = \OML/lmm/m/it
+/10 T; W \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 T\OT1/lmr/m/n/10 ) = [] = []
+ []
+
+[8]
+Overfull \hbox (40.8511pt too wide) detected at line 595
+[] \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 R \OT1/lmr/m/n/10 = \OML
+/lmm/m/it/10 F; C \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 c; S \OT1/lmr/m/n/10 = \OM
+L/lmm/m/it/10 T; W \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 T\OT1/lmr/m/n/10 ) = [] \
+OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 C \OT1/lmr/m/n/10 = \OML/lmm
+/m/it/10 c\OT1/lmr/m/n/10 )\OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 
+R \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 F\OMS/lmsy/m/n/10 j\OML/lmm/m/it/10 C \OT1
+/lmr/m/n/10 = \OML/lmm/m/it/10 c\OT1/lmr/m/n/10 )\OML/lmm/m/it/10 P\OT1/lmr/m/n
+/10 (\OML/lmm/m/it/10 S \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 T\OMS/lmsy/m/n/10 j\
+OML/lmm/m/it/10 C \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 c\OT1/lmr/m/n/10 )\OML/lmm
+/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 W \OT1/lmr/m/n/10 = \OML/lmm/m/it/1
+0 T\OMS/lmsy/m/n/10 j\OML/lmm/m/it/10 R \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 F; C
+ \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 c\OT1/lmr/m/n/10 )[] 
+ []
+
+[9] (./Castro-Dau_Monge_Kumar_Lötscher_Project6.aux) ) 
 Here is how much of TeX's memory you used:
- 13004 strings out of 478994
- 196744 string characters out of 5858183
- 541199 words of memory out of 5000000
+ 13013 strings out of 478994
+ 196834 string characters out of 5858183
+ 541433 words of memory out of 5000000
  30171 multiletter control sequences out of 15000+600000
- 446113 words of font info for 92 fonts, out of 8000000 for 9000
+ 446445 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 85i,6n,88p,2396b,473s stack positions out of 5000i,500n,10000p,200000b,80000s
-{
-/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local
-/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2021
-/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2021/texmf-dist/fo
-nts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/
-lm/lm-mathit.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-math
-ex.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></u
-sr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/t
-exlive/2021/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/202
-1/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2021/texmf-di
-st/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2021/texmf-dist/fonts/ty
-pe1/public/lm/lmmi7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/
-lm/lmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr12.pf
-b></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/loc
-al/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr5.pfb></usr/local/texlive/2
-021/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2021/texmf-di
-st/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
-ype1/public/lm/lmsy5.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public
-/lm/lmsy7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtk10.
-pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/
-local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/tex
-live/2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Castro-Dau_Monge_Kumar_Lötscher_Project6.pdf (8 pages, 6971
-81 bytes).
+ 85i,6n,88p,2396b,373s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/202
+1/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2021/texmf-di
+st/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/
+dvips/lm/lm-ec.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-rm
+.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr
+/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}</usr/local/tex
+live/2021/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2021/
+texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2021/texmf-dist
+/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2021/texmf-dist/fonts/typ
+e1/public/lm/lmmi10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/
+lm/lmmi5.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi7.pf
+b></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/loc
+al/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/
+2021/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2021/texmf-
+dist/fonts/type1/public/lm/lmr5.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
+ype1/public/lm/lmr7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/
+lm/lmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmsy5.p
+fb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/lo
+cal/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/local/texliv
+e/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2021/tex
+mf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2021/texmf-dist/f
+onts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Castro-Dau_Monge_Kumar_Lötscher_Project6.pdf (9 pages, 6988
+68 bytes).
 PDF statistics:
- 246 PDF objects out of 1000 (max. 8388607)
- 203 compressed objects within 3 object streams
- 43 named destinations out of 1000 (max. 500000)
+ 250 PDF objects out of 1000 (max. 8388607)
+ 206 compressed objects within 3 object streams
+ 44 named destinations out of 1000 (max. 500000)
  22653 words of extra memory for PDF output out of 24883 (max. 10000000)
 
