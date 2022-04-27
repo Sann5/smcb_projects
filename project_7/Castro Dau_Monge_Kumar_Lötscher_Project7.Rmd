@@ -16,46 +16,8 @@ library(graph)
 
 ## Problem 17: Junction Tree Algorithm
 ### (a) Build the Junction Tree of the network.
-#### Moralize graph and trinagulate
-```{r}
-adj_mat = matrix(1, 
-                 ncol = 11, 
-                 nrow = 11, 
-                 dimnames = list(LETTERS[seq( from = 1, to = 11 )], 
-                                 LETTERS[seq( from = 1, to = 11 )]))
-adj_mat[lower.tri(adj_mat, diag = TRUE)] = 0
-
-## Changing A
-adj_mat[1, ] = c(0,1,1,0,0,0,0,0,0,0,0)
-## Changing B
-adj_mat[2, ] = c(1,0,1,0,0,0,0,0,0,0,0)
-## Changing C
-adj_mat[3, ] = c(1,1,0,1,0,1,0,0,0,0,0)
-## Changing D
-adj_mat[4, ] = c(0,0,1,0,1,1,0,0,0,0,0)
-## Changing E
-adj_mat[5, ] = c(0,0,0,1,0,1,1,0,0,0,0)
-## Changing F
-adj_mat[6, ] = c(0,0,1,1,1,0,1,0,1,0,0)
-## Changing G
-adj_mat[7, ] = c(0,0,0,0,1,1,0,1,0,0,0)
-## Changing H
-adj_mat[8, ] = c(0,0,0,0,0,0,1,0,0,0,0)
-## Changing I
-adj_mat[9, ] = c(0,0,0,0,0,1,0,0,0,1,1)
-## Changing J
-adj_mat[10, ] = c(0,0,0,0,0,0,0,0,1,0,0)
-## Changing K
-adj_mat[11, ] = c(0,0,0,0,0,0,0,0,1,0,0)
-
-g = graphAM(adjMat = adj_mat, edgemode = 'undirected')
-plot(g)
-```
-
-
-#### Build clique grpah
-
-#### Brake cycles
+![](./img/g1.png)
+![](./img/g2.png)
 
 ### (b) Write the joint probability P(U) in terms of the cluster and separator potentials.
 $$
