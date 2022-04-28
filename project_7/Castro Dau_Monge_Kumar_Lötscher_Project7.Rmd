@@ -45,7 +45,7 @@ Initialization:
 ### (b)
 
 The computational complexity for computing the marginal probability 
-$P(X_{4} = 1)$ is $O(NK^{2})$. For each node that can assume K values, since $(n - 1)K^{2}$ computations have to be done for the forward message passing and $(N - n)K^{2}$ computations have to be done for the backward message passing, this sums to $(N-1)K^{2}$ computations which is of the order $O(NK^{2})$
+$P(X_{4} = 1)$ is $O(NK^{2})$, where $N$ is the chain length, here $5$ and $K$ is the number of values each node can assume, here $2$. For each node that can assume $K$ values, since $(n - 1)K^{2}$ computations have to be done for the forward message passing and $(N - n)K^{2}$ computations have to be done for the backward message passing, this sums to $(N-1)K^{2}$ computations which is of the order $O(NK^{2})$
 
 ### (c)
 
