@@ -187,8 +187,10 @@ for(lambda in lambdas){
     C = C + (1-lambda)^sum(u != model)
   }
   
-  Trn[as.character(lambda),"v1"] = (1/C)*(1-lambda)^s_uv1
-  Trn[as.character(lambda),"v2"] = (1/C)*(1-lambda)^s_uv2
+  C = C * lambda
+  
+  Trn[as.character(lambda),"v1"] = (1/C)*(1-lambda)^s_uv1 * lambda
+  Trn[as.character(lambda),"v2"] = (1/C)*(1-lambda)^s_uv2 * lambda
 }
 
 Trn
