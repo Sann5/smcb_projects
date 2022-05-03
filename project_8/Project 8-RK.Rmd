@@ -106,7 +106,7 @@ nem2$score
 ## Problem 21: Hidden Markov NEMs
 ###  1. Using the defnitions for HM-NEMs from the lecture, compute the transition probabilities from $G_{t} = u$ to $G_{t+1} \in {v1, v2}$ for different smoothness parameter $\lambda \in {0.1, \dots 0.9}$.
 ```{r}
-
+## not sure if the enumerate has to be used and how?
 u = t(array(c(c(1,1,1,0),
               c(0,1,1,1),
               c(0,0,1,1),
@@ -221,6 +221,7 @@ gamma = array(dim = c(2,4), dimnames = list(c("F1","F2"),
 gamma["F1",] = pi[1]*diag(L1)/sum(pi[1]*diag(L1))
 gamma["F2",] = pi[2]*diag(L2)/sum(pi[2]*diag(L2))
 
+##Responsibilities should be in  [0,1]??
 print("Responsibilities")
 gamma
 
