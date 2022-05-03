@@ -177,7 +177,7 @@ s_uv2 = sum(u!=v2)
 Trn = array(dim = c(9,2), dimnames = list(lambdas,c("v1", "v2")))
 models = mnem:::enumerate.models(4, 
                                  name=c("S1", "S2", "S3", "S4"), 
-                                 trans.close = TRUE, 
+                                 trans.close = FALSE, 
                                  verbose=FALSE)
 
 for(lambda in lambdas){
@@ -211,3 +211,5 @@ plot<-ggplot(data,aes(x=lambda,y=T,color=v))+
 plot
 
 ```
+
+## Problem 22: Mixture NEMs

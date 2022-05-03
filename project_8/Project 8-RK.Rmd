@@ -53,8 +53,7 @@ theta2["S3",] = c(0,0,0,0,0,0)
 theta2["S4",] = c(0,0,1,0,0,0)
 theta2["S5",] = c(0,0,0,0,1,0)
 
-theta1
-theta2
+ 
 ```
 #### Calculate $F = \Phi \Theta$
 
@@ -93,16 +92,15 @@ D1
 D2
 ```
 Since the Data matrices D1 and D2 are identical, we cannot tell the two models apart.
-### 3. Use the mnem1 package for this question: Take D1 and D2 from the previous question. For each model, calculate the marginal log-likelihood ratio (network score) given the data by setting the false positive rate to be $5%$ and the false negative rate to be $1%$.
 ```{r}
 library(mnem)
-#nem1 = nem(D1,marginal = TRUE,fpfn = c(0.05,0.01))
-#nem1$score
-#nem2 = nem(D2,marginal = TRUE,fpfn = c(0.05,0.01))
-#nem2$score
+nem1 = nem(D1,marginal = TRUE,fpfn = c(0.05,0.01))
+nem1$score
+nem2 = nem(D2,marginal = TRUE,fpfn = c(0.05,0.01))
+nem2$score
 ###Not sure which one it is
-scoreAdj(D1,adj = phi1,method="disc",marginal=TRUE,fpfn=c(0.05,0.01))$score
-scoreAdj(D2,adj = phi2,method="disc",marginal=TRUE,fpfn=c(0.05,0.01))$score
+#scoreAdj(D1,adj = phi1,method="disc",marginal=TRUE,fpfn=c(0.05,0.01))$score
+#scoreAdj(D2,adj = phi2,method="disc",marginal=TRUE,fpfn=c(0.05,0.01))$score
 ```
 
 ## Problem 21: Hidden Markov NEMs
@@ -132,20 +130,11 @@ lambda = seq(0.1, 0.9, by=0.1)
 
 s_uv1 = sum(u!=v1)
 s_uv2 = sum(u!=v2)
-w = mnem:::enumerate.models(c("S1","S2","S3","S4"),trans.close = FALSE)
-s_uw = array(dim = c(length(w), 1))
-for(i in 1:length(w)){
-  s_uw[i] = sum(u!=w[[i]])
-}
-
-power <- function(x, y) sign(x) * abs(x)^y
-
 
 T = array(dim = c(9,2), dimnames = list(lambda,c("v1", "v2")))
 C = array(dim = c(9,1), dimnames = list(lambda,c("C")))
-
 for(i in lambda){
-  C[as.character(i),] = sum(power((1-i),s_uw)*i)
+  C[as.character(i),] = ((1-i)^s_uv1)*i + ((1-i)^s_uv2)*i
   T[as.character(i),"v1"] = (1/C[as.character(i),])*((1-i)^s_uv1)*i
   T[as.character(i),"v2"] = (1/C[as.character(i),])*((1-i)^s_uv2)*i
 }
@@ -202,7 +191,7 @@ theta_F2["S2",] = c(1,0)
 
 EEP_F1 = t(t(rho)%*%phi_F1%*%theta_F1)
 EEP_F1[EEP_F1>1] = 1
-EEP_F2 = t(t(rho)%*%phi_F2%*%theta_F2)
+EEP_F2 = t(t(rho)%*%phi_F1%*%theta_F2)
 EEP_F2[EEP_F2>1] = 1
 
 print("Expected effect pattern of F1")
@@ -217,26 +206,20 @@ EEP_F2
 ```{r}
 R= cbind(EEP_F1[,1:2],EEP_F2[,3:4])
 R[R==0] = -1
-R
 ```
 
 ### 3. Take R from the previous question. Given the vector of mixture weights $\pi = (0.44, 0.56)$, calculate the responsibilities $\Gamma$. Then, update the mixture weights.
 
 ```{r}
-library("expm")
 L1 = t(EEP_F1)%*%R
 L2 = t(EEP_F2)%*%R
-print("L1")
-L1
-print("L2")
-L2
+
 pi = c(0.44,0.56)
 
 gamma = array(dim = c(2,4), dimnames = list(c("F1","F2"),
                                             c("C1", "C2", "C3", "C4")))
-
-gamma["F1",] = pi[1]*exp(diag(L1))/(pi[1]*exp(diag(L1))+pi[2]*exp(diag(L2)))
-gamma["F2",] = pi[2]*exp(diag(L2))/(pi[2]*exp(diag(L2))+pi[1]*exp(diag(L1)))
+gamma["F1",] = pi[1]*diag(L1)/sum(pi[1]*diag(L1))
+gamma["F2",] = pi[2]*diag(L2)/sum(pi[2]*diag(L2))
 
 ##Responsibilities should be in  [0,1]??
 print("Responsibilities")
