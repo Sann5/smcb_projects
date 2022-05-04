@@ -17,7 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ### 1. For each model, construct the transitive closure (by adding edges) and define the corresponding adjacency matrices $\Phi$ and $\Theta$, which represent the signalling pathways and the E-gene attachments. Determine the corresponding expected effect patterns (F).
 
 ![New edges drawn in blue.](./img/trans_clos.png)
+
+
 #### Construct phi
+
 ```{r}
 phi1 = t(array(c(c(1,0,1,1,1),
                 c(0,1,0,0,1),
@@ -35,15 +38,21 @@ phi2 = t(array(c(c(1,0,0,1,1),
                 dim = c(5, 5), dimnames = list(c("S1", "S2", "S3", "S4", "S5"),
                                              c("S1", "S2", "S3", "S4", "S5"))))
 ```
+
 #### a) $\Phi$
+
 ```{r}
 phi1
 ```
+
 #### b) $\Phi$
+
 ```{r}
 phi2
 ```
+
 #### Construct thetha
+
 ```{r}
 theta1 = array(dim = c(5,6), dimnames = list(c("S1", "S2", "S3", "S4", "S5"),
                                              c("E1", "E2", "E3", "E4", "E5","E6")))
@@ -61,28 +70,40 @@ theta2["S3",] = c(0,0,0,0,0,0)
 theta2["S4",] = c(0,0,1,0,0,0)
 theta2["S5",] = c(0,0,0,0,1,0)
 ```
+
 #### a) $\Theta$
+
 ```{r}
 theta1
 ```
+
 #### b) $\Theta$
+
 ```{r}
 theta2
 ```
+
 #### Calculate $F = \Phi \Theta$
+
 ```{r}
 F1 = phi1%*%theta1
 F2 = phi2%*%theta2
 ```
+
 #### a) $F$
+
 ```{r}
 F1
 ```
+
 #### b) $F$
+
 ```{r}
 F2
 ```
+
 ### 2. Assuming no noise, determine the discrete data D1 and D2 from both models. Given only the data, can you tell apart the two models?
+
 ```{r}
 D1 = array(dim = c(6, 5), dimnames = list(c("E1", "E2", "E3", "E4", "E5","E6"),
                                           c("S1", "S2", "S3", "S4", "S5")))
@@ -105,11 +126,15 @@ D2["E5",] = c(1,1,1,1,0)
 D2["E6",] = c(0,1,0,0,1)
 
 ```
+
 #### a) $D1$
+
 ```{r}
 D1
 ```
+
 #### 2) $D2$
+
 ```{r}
 D2
 ```
@@ -125,11 +150,13 @@ network_score_2 = scoreAdj(D2,adj = phi2,method="disc",fpfn=c(0.05,0.01))$score
 ```
 
 #### Network score of (a)
+
 ```{r}
 network_score_1
 ```
 
 #### Network score of (b)
+
 ```{r}
 network_score_2
 ```
