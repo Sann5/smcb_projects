@@ -119,8 +119,8 @@ Since the Data matrices D1 and D2 are identical, we cannot tell the two models a
 
 ```{r}
 library(mnem)
-network_score_1 = scoreAdj(D1,adj = phi1,method="disc",marginal=TRUE,fpfn=c(0.05,0.01))$score
-network_score_2 = scoreAdj(D2,adj = phi2,method="disc",marginal=TRUE,fpfn=c(0.05,0.01))$score
+network_score_1 = scoreAdj(D1,adj = phi1,method="disc",fpfn=c(0.05,0.01))$score
+network_score_2 = scoreAdj(D2,adj = phi2,method="disc",fpfn=c(0.05,0.01))$score
 
 ```
 
