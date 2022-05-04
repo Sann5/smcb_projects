@@ -201,7 +201,7 @@ plot
 
 ```
 
-As $\lambda$ increases the similarity between networks becomes more relevant the transition probabilities, that is, dissimilar networks get more highly penalized with a lower transition probability as $\lambda$ increases. Since $v_1$ is more similar to $u$ than $v_2$, the probability to transition into $v_1$ increases as we increase $\lambda$. Conversely as we bring $\lambda$ close to zero, network similarity becomes less relevant and we see the transition probabilities of $v_1$ and $v_2$ converge.
+As $\lambda$ increases the similarity between networks becomes more relevant for the transition probabilities, that is, dissimilar networks get more highly penalized with a lower transition probability as $\lambda$ increases. Since $v_1$ is more similar to $u$ than $v_2$, the probability to transition into $v_1$ increases as we increase $\lambda$. Conversely as we bring $\lambda$ close to zero, network similarity becomes less relevant and we see the transition probabilities of $v_1$ and $v_2$ converge.
 
 ## Problem 22: Mixture NEMs
 
