@@ -30,6 +30,7 @@ True --> Generally for any node if  conditioned on the markov blanket its going 
 ###  Using the data from MVN DAG.rds2, display the observations of A and B in a scatterplot. 
 ```{r}
 library("ggplot2")
+library("pcalg")
 ```
 
 ```{r}
