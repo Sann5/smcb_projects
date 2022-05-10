@@ -4,7 +4,7 @@ author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
 output: pdf_document
 ---
 
-## Problem 20: Classical NEMs
+## Problem 23: d-separation 
 ###  1. Write down all the variables that are d-separated from A given {C,D}
 A and G are d-separated since both the paths A-C-G and A-D-G are both blocked 
 
