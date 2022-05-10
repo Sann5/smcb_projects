@@ -4,6 +4,17 @@ author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
 output: pdf_document
 ---
 
-## Problem title and number
-### Subprublem leter or number
+## Problem 20: Classical NEMs
+###  1. Write down all the variables that are d-separated from A given {C,D}
+A and G are d-separated since both the paths A-C-G and A-D-G are both blocked 
+
+###  2. Indicate whether each statement is true or false and explain your choice.
+#### (a) B is conditionally independent of C given D.
+False--> the path B-D-A-C is still active
+#### (b) G is conditionally independent of E given D.
+False--> the path G-C-A-D-B-F-E is still active
+#### (c) C is conditionally independent of F given A.
+True--> true since all paths are inactive
+#### (d) C is conditionally independent of E given its Markov blanket (of C)
+True --> Generally for any node if  conditioned on the markov blanket its going to be independend of the other nodes. Every node is independent of its non-descendants(parents).
 
