@@ -85,6 +85,7 @@ qplot(residualA_C,residualB_C)+theme_classic()+geom_abline(intercept =slr.coef[1
 
 ```
 What do you see?
+There seems to be a trend in the plot which suggests that  there could be a partial correlation.
 
 ### 4. Use the function cor.test() to test the null hypothesis of no correlation between the residualsof A (regressed on C) and the residuals of B (regressed on C)
 ```{r}
