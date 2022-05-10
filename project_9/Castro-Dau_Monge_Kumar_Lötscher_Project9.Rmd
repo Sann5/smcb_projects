@@ -1,9 +1,16 @@
 ---
-title: 'Project #'
+title: "Project 9"
 author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
-output: pdf_document
+date: '2022-05-05'
+output: 
+  pdf_document:
+    extra_dependencies:
+      amsmath
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 ## Problem 23: d-separation 
 ###  1. Write down all the variables that are d-separated from A given {C,D}
 A and G are d-separated since both the paths A-C-G and A-D-G are both blocked 
@@ -36,12 +43,14 @@ DAG<-readRDS("./MVN_DAG.rds", refhook = NULL)
 #Create the scatterplot
 
 slr.coef<-coef(lm(B~ A,DAG))
-qplot(A,B,data=DAG)+theme_classic()+geom_abline(intercept =slr.coef[1], slope = slr.coef[2],colour="blue" )+ ggtitle("Marginal coorelation")
+qplot(A,B,data=DAG)+theme_classic()+geom_abline(intercept =slr.coef[1], slope = slr.coef[2],colour="blue" )+ ggtitle("Marginal Coorelation")
 
 
 ```
-What does the plot suggest about their (marginal) correlation? Does it agree with Figure 3?
-TBA........
+What does the plot suggest about their (marginal) correlation?
+There seems to be no trend in the plot which suggests no correlation.
+Does it agree with Figure 3?
+TBA:::
 
 ```{r}
 #Coorelation Test
@@ -54,3 +63,37 @@ Use the function cor.test() to test the null hypothesis of no correlation betwee
 We cant reject the hypothesis that A and B are uncorrelated
 
 
+
+## Problem 25: Testing for partial correlation 
+###Compute the partial correlation ρA,B|C to assess the association between A and B given C as follows:
+### 1. Linearly regress A on C (that is, with A as the response variable and C as the explanatory variable). Compute and store the residuals. 
+```{r}
+regA_C<-lm(A~ C,as.data.frame(DAG))
+residualA_C<-residuals(regA_C)
+```
+
+### 2. Linearly regress B on C. Compute and store the residuals. 
+```{r}
+regB_C<-lm(B~ C,as.data.frame(DAG))
+residualB_C<-residuals(regB_C)
+```
+
+### 3. Plot the residuals of A (regressed on C) against the residuals of B (regressed on C). 
+```{r}
+slr.coef<-coef(lm(residualB_C~ residualA_C))
+qplot(residualA_C,residualB_C)+theme_classic()+geom_abline(intercept =slr.coef[1], slope = slr.coef[2],colour="blue" )+ ggtitle("Partial Correlation ")
+
+```
+What do you see?
+
+### 4. Use the function cor.test() to test the null hypothesis of no correlation between the residualsof A (regressed on C) and the residuals of B (regressed on C)
+```{r}
+#Coorelation Test
+
+cor.test(residualA_C,residualB_C)
+
+```
+What is your conclusion? 
+With the p-value of 6.6e-13 we can reject the Null Hypothesis which states that there is no partial correlation. We can say that A and B are conditionally independent given C.
+Does this agree with your expectation based on the underlying DAG in Figure 3?
+TBA::::
