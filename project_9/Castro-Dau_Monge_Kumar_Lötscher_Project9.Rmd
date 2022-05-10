@@ -18,3 +18,17 @@ True--> true since all paths are inactive
 #### (d) C is conditionally independent of E given its Markov blanket (of C)
 True --> Generally for any node if  conditioned on the markov blanket its going to be independend of the other nodes. Every node is independent of its non-descendants(parents).
 
+
+## Problem 24: Testing for marginal correlation 
+###  Using the data from MVN DAG.rds2, display the observations of A and B in a scatterplot. What does the plot suggest about their (marginal) correlation? Does it agree with Figure 3? Use the function cor.test() to test the null hypothesis of no correlation between A and B. What is your conclusion?
+```{r}
+library("ggplot2")
+```
+
+```{r}
+#Read in dataste
+set.seed(1)
+DAG<-readRDS("./MVN_DAG.rds", refhook = NULL)
+
+
+```
