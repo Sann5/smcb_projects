@@ -36,7 +36,7 @@ library("BiDAG")
 
 ```{r}
 #Read in dataset
-set.seed(1)
+set.seed(0)
 DAG<-readRDS("./MVN_DAG.rds", refhook = NULL)
 
 ```
@@ -61,7 +61,7 @@ cor.test(DAG$A,DAG$B)
 
 ```
 
-Use the function cor.test() to test the null hypothesis of no correlation between A and B. What is your conclusion?
+Use the function cor.test() to test the null hypothesis of no correlation between A and B as it gives us a p-value of p-value = 0.8401. What is your conclusion?
 We cant reject the hypothesis that A and B are uncorrelated
 
 
@@ -130,6 +130,5 @@ plot(m2graph(partmcmc$DAG),main="Partition MCMC Algorithm Graph")
 ```
 
 How is the result affected by the hyper-parameter αμ?
-TBA::::::::::::
 
 
