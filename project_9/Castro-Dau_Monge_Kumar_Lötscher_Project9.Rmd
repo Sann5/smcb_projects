@@ -134,3 +134,5 @@ plot(m2graph(partmcmc$DAG), main="Partition MCMC Algorithm Graph")
 
 How is the result affected by the hyper-parameter $\alpha_\mu$?
 The colliders are preserved for every value of $\alpha_\mu$ while the rest of the skeleton/structure gets lost for smaller values of $\alpha_\mu$, where we observe a sparse network with several disconnected components.
+
+Our intuition behinds comes from the fact that the BGe score is a decompose likelihood function that assumes that the data is normal with mean vector $\mu$, and this vector $\mu$ has at the same time a prior with mean $\nu$ and variance $\alpha_\mu W$, where $\alpha_\mu$ controls how narrow we believe our data do be distributed a priori. Then the algorithm, for a reason not so clear to us, scores sparse networks with higher likelihoods when the variance is lower (smaller values of $\alpha_\mu$). We also observe this in homework 1, where there is more edges for higher values of $\alpha_\mu$.
