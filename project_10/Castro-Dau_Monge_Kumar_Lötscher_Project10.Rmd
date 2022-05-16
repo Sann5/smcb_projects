@@ -1,9 +1,74 @@
 ---
-title: 'Project #'
+title: "Project 10"
 author: "Santiago Castro Dau, June Monge, Rachita Kumar, Sarah Lötscher"
-output: pdf_document
+date: '2022-05-05'
+output: 
+  pdf_document:
+    latex_engine: xelatex
+    extra_dependencies:
+      amsmath
 ---
 
-## Problem title and number
-### Subprublem leter or number
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Problem 27: Uniqueness of predictions from the lasso 
+###  1. 
+```{r}
 
+```
+
+## Problem 28: Bayesian priors as regularizers 
+
+```{r}
+
+```
+
+## Problem 28: Testing for partial correlation 
+:
+
+```{r, echo = FALSE}
+library("ggplot2")
+library("caret")
+library("glmnet")
+library("pROC")
+library("magrittr")
+
+```
+
+
+### 1. Load the data and construct the design matrix X and response variable y, respectively. Randomly split the data into training set (70%) and test set (30%). For reproducibility set the seed to 42 in the beginning.
+
+```{r}
+#Read in dataset
+set.seed(23)
+#set.seed(42)
+load("./yeastStorey.rda")
+```
+
+```{r}
+#Sample data
+Sampledata<- data$Marker %>%
+  createDataPartition(p = 0.7,list = FALSE)
+
+#Create training data
+Traindata<-data[Sampledata, ]
+
+#Create test data
+Testdata<-data[-Sampledata, ]
+
+```
+
+
+```{r}
+#Create X and y train
+X_train <- sapply()
+
+Y_train<- Traindata
+
+#Create X and y test
+X_test
+
+Y_test
+
+```
