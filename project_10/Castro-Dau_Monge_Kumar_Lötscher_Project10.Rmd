@@ -42,8 +42,7 @@ library("dplyr")
 
 ```{r}
 #Read in dataset
-set.seed(23)
-#set.seed(42)
+set.seed(42)
 load("./yeastStorey.rda")
 ```
 
