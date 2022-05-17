@@ -48,8 +48,7 @@ load("./yeastStorey.rda")
 
 ```{r}
 #Sample data
-Sampledata<- data$Marker %>%
-  createDataPartition(p = 0.7,list = FALSE)
+Sampledata<- createDataPartition(data$Marker,p = 0.7,list = FALSE)
 
 #Create training data
 Traindata<-data[Sampledata, ]
