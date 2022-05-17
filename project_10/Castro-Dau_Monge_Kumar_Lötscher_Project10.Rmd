@@ -14,8 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 ## Problem 27: Uniqueness of predictions from the lasso 
 ###  1. 
-{r}
-
 
 We will prove the statement of the exercise by contradiction. Let us define two solutions $\hat{\beta_1}$ and $\hat{\beta_2}$ $\in S$ such that $X\hat{\beta_1}\ne X\hat{\beta_2}$. Since the solution set $S$ of the convex minimization problem is convex, $\alpha \hat{\beta_1}+(1-\alpha)\hat{\beta_2} \in S$, and given the strict convexity of the loss function, $f(\alpha \hat{\beta_1}+(1-\alpha)\hat{\beta_2})< \alpha f(\hat{\beta_1}) + (1-\alpha)f(\hat{\beta_2})$, we obtain the following:
 $$
