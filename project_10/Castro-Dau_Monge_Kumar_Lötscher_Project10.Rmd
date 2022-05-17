@@ -135,7 +135,6 @@ plot(Acc, legacy.axes=TRUE)
 ```{r}
 #Plot trace curve of coefficients as a function of log λ
 plot(crossval[[11]]$glmnet.fit,"lambda",label=TRUE)
-abline(v=log(crossval[[11]]$lambda.min),col="red")
 ```
 
 
