@@ -151,3 +151,10 @@ plot(crossval[[11]])
 #Get the AUC
 AUC$auc
 ```
+
+```{r}
+#Variables/predictors selected
+predictors<-coef(crossval[[11]], param$lambda)
+predictors@Dimnames[[1]][predictors@i]
+
+```
