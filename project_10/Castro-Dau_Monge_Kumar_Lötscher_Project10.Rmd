@@ -25,7 +25,9 @@ $$
 $$
 \frac{1}{2}||y-X(\alpha \hat{\beta_1}+(1-\alpha)\hat{\beta_2})||_2^2 + \lambda || \alpha \hat{\beta_1}+(1-\alpha)\hat{\beta_2} ||_1 < c^* \\
 $$
-Note that due to the convexity of the problem  $\{\alpha \hat{\beta_1}+(1-\alpha)\hat{\beta_2},\;\hat{\beta_1},\;\hat{\beta_2}\} \in S, \forall \alpha \in (0,1)$, thus, the $c^$ corresponding to the solution $\alpha\hat{\beta_1}+(1-\alpha)\hat{\beta_2}$ should not be lower than $c^$, as we have stablished that $\hat{\beta_1} \text{ and } \hat{\beta_2} \in S$ give rise to the optimal criterion value $c^*$.  Overall, this implies that $X\hat{\beta_1} = X\hat{\beta_2}$.
+
+Note that due to the convexity of the problem  $\{\alpha \hat{\beta_1}+(1-\alpha)\hat{\beta_2},\;\hat{\beta_1},\;\hat{\beta_2}\} \in S, \forall \alpha \in (0,1)$, thus, the $c$ corresponding to the solution $\alpha\hat{\beta_1}+(1-\alpha)\hat{\beta_2}$ should not be lower than $c$, as we have stablished that $\hat{\beta_1} \text{ and } \hat{\beta_2} \in S$ give rise to the optimal criterion value $c^*$.  Overall, this implies that $X\hat{\beta_1} = X\hat{\beta_2}$.
+
 ###  2.
 As proven above, given that $X\hat{\beta_1} = X\hat{\beta_2}$, then it holds that:
 $$
