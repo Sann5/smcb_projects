@@ -37,10 +37,85 @@ This shows that $||\hat{\beta_1}||_1 = ||\hat{\beta_2}||_1$.
 
 
 ## Problem 28: Bayesian priors as regularizers 
+To recover the least squared estimator in the Bayesian setting one seeks to maximize the probability of the labels $y_{1:n}$ given their corresponding feature vectors $x_{1:n}$ and the parameters of the model. In this case since we are speaking of linear regression, our model is given by $Y = h(X) + \epsilon$, where $\epsilon \sim \mathcal{N}(0, \sigma^2)$ and $h(X) = w^TX$, therefore our model parameters are $\sigma^2$ and $w$ (note that we use $w$ instead of $\beta$, like in the homework description for the weights). Then we seek to maximize this probability by finding the best $w$, since we $\sigma^2$ is assumed to be fixed. 
 
-```{r}
+$$
+\hat{w} = \underset{w}{\operatorname{argmax}} P(y_{1:n} | x_{1:n}, w, \sigma^2) 
+$$
 
-```
+Assuming that all $n$ data points are $i.i.d$ and by applying the log, we can rewrite this expression as follows.
+
+$$
+= \underset{w}{\operatorname{argmin}} - \sum_{i=1}^n \log P(y_{i} | x_{i}, w, \sigma^2) 
+$$
+
+Then we can plug in our assumptions about the model to give way to the optimal set of weights $\hat{w}$.
+
+$$
+- \log P(y_{i} | x_{i}, w, \sigma^2) = - \log \mathcal{N}(y_{i} ; w^Tx_{i}, \sigma^2) 
+$$
+$$
+= - \log \frac{1}{\sqrt{2\pi\sigma^2}} \exp{-\frac{(y-w^Tx)^2}{2\sigma^2}}
+$$
+$$
+= \frac{1}{2} \log 2\pi\sigma^2 + \frac{(y-w^Tx)^2}{2\sigma^2}
+$$
+
+Coming back to our optimization problem we can now write it as follows.
+
+$$
+\hat{w} = \underset{w}{\operatorname{argmin}} \sum_{i=1}^n (\frac{1}{2} \log 2\pi\sigma^2 + \frac{(y-w^Tx)^2}{2\sigma^2}) 
+$$
+$$
+= \underset{w}{\operatorname{argmin}} \frac{n}{2} \log 2\pi\sigma^2 + \frac{1}{2\sigma^2} \sum_{i=1}^n (y-w^Tx)^2
+$$
+
+Since the firs term is independent of $w$ we can eliminate it, yielding the expression for the least square loss. From this result we can deduce that least squares linear regression is then equivalent to performing MLE for a conditional linear Gaussian likelihood. One can also clearly see from this demonstration that by performing OLS regression one implicitly places some statistical assumptions on the data, namely that the error is normally distributed and independent of the input (homoscedasticity). This assumption is characteristic of the least squared loss. 
+
+$$
+\hat{w} = \underset{w}{\operatorname{argmin}} \sum_{i=1}^n (y-w^Tx)^2
+$$
+
+Now that we have an expression for the likelihood $P(y_{1:n} | x_{1:n}, w, \sigma^2)$ we would like to perform MAP estimation on the probability of the weights given the data $P(w | y_{1:n}, x_{1:n})$, since maximizing this probability is equivalent to finding the most probable weights $\hat{w}$. 
+
+$$
+P(w | y_{1:n}, x_{1:n}) = \frac{P(w,  y_{1:n}, x_{1:n})}{P(y_{1:n}, x_{1:n})}
+$$
+$$
+= \frac{P(y_{1:n} | w, x_{1:n}) P(w| x_{1:n}) P(x_{1:n})}{P(y_{1:n}| x_{1:n}) P(x_{1:n})}
+$$
+
+Since the prior doesn't depend on the data we can simplify $P(w| x_{1:n})$ to $P(w)$.
+
+$$
+= \frac{P(y_{1:n} | w, x_{1:n}) P(w) }{P(y_{1:n}| x_{1:n})}
+$$
+
+By maximizing this quantity and plugging in our derived expression for the likelihood and a Laplassian prior, we obtain the Lasso regression estimator. 
+
+$$
+\hat{w} = \underset{w}{\operatorname{argmax}} \frac{P(y_{1:n} | w, x_{1:n}) P(w) }{P(y_{1:n}| x_{1:n})}
+$$
+$$
+\hat{w} = \underset{w}{\operatorname{argmin}} -\log{P(w)} -\log{P(y_{1:n} | w, x_{1:n})}  + \underset{\text{indp. of w}}{\underbrace{\log{P(y_{1:n}| x_{1:n})}}}
+$$
+$$
+= \underset{w}{\operatorname{argmin}} -\log{\prod_{j = 1}^p \frac{1}{2b} \exp{(\frac{-|w_j|}{b}})} + \frac{1}{2\sigma^2} \sum_{i=1}^n (y-w^Tx)^2
+$$
+
+$$
+-\log{\prod_{j = 1}^p \frac{1}{2b} \exp{(\frac{-|w_j|}{b}})} = - (
+\underset{\text{indp.of w}}{\underbrace{\sum_{j = 1}^p \log{\frac{1}{2b}}}} + \sum_{j = 1}^p \log{\exp{(\frac{-|w_j|}{b}})})
+$$
+$$
+\hat{w} = \underset{w}{\operatorname{argmin}} \frac{1}{b} \sum_{j = 1}^p |w_j| + \frac{1}{2\sigma^2} \sum_{i=1}^n (y-w^Tx)^2 
+$$
+
+Finally we can group together the constants into a single one $\lambda$ and write the expression in matrix notation.
+
+$$
+\hat{w} = \underset{w}{\operatorname{argmin}} \; \lambda ||w||_1 + \frac{1}{2}  ||\mathrm{y}-\mathrm{X}w||_2^2 
+$$
 
 ## Problem 29: Variable selection under various norms
 :
@@ -141,7 +216,7 @@ predY <- predict(model, newx = X_test, type = "class")
 
 
 ```{r}
-#Plot cross-validation error as a function of log λ
+#Plot cross-validation error as a function of log 
 
 Acc <- roc(Y_test,as.vector(predY))
 plot(Acc, legacy.axes=TRUE)
